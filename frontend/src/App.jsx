@@ -10,6 +10,10 @@ import Players from './pages/Players'
 import PlayerDetail from './pages/PlayerDetail'
 import Login from './pages/Login'
 import ChangePassword from './pages/ChangePassword'
+import ProtectedRoute from './components/ProtectedRoute'
+import AdminPlayers from './pages/admin/AdminPlayers'
+import AdminTournaments from './pages/admin/AdminTournaments'
+import AdminTournamentManage from './pages/admin/AdminTournamentManage'
 
 export default function App() {
   return (
@@ -26,6 +30,9 @@ export default function App() {
             <Route path="players/:id" element={<PlayerDetail />} />
             <Route path="login" element={<Login />} />
             <Route path="change-password" element={<ChangePassword />} />
+            <Route path="admin/players" element={<ProtectedRoute><AdminPlayers /></ProtectedRoute>} />
+            <Route path="admin/tournaments" element={<ProtectedRoute><AdminTournaments /></ProtectedRoute>} />
+            <Route path="admin/tournaments/:id" element={<ProtectedRoute><AdminTournamentManage /></ProtectedRoute>} />
           </Route>
         </Routes>
       </BrowserRouter>

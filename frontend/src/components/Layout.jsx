@@ -28,6 +28,8 @@ export default function Layout() {
         <LanguageSwitcher />
         {isAdmin ? (
           <>
+            <NavLink to="/admin/tournaments">⚙ {t('nav.adminTournaments')}</NavLink>
+            <NavLink to="/admin/players">⚙ {t('nav.adminPlayers')}</NavLink>
             <NavLink to="/change-password">{t('nav.changePassword')}</NavLink>
             <button onClick={handleLogout}>{t('nav.logout')}</button>
           </>
