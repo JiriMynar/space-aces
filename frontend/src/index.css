@@ -10,6 +10,8 @@
   --text-dim: #8a97c2;
   --accent: #4d7cff;
   --accent-2: #22d3ee;
+  --accent-warm: #ff6a2b;
+  --ember: #ff3b30;
   --win: #34d399;
   --lose: #f87171;
   --radius: 10px;
@@ -28,9 +30,11 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(1200px 600px at 80% -10%, rgba(34, 211, 238, 0.08), transparent),
-    radial-gradient(1000px 500px at 0% 0%, rgba(77, 124, 255, 0.1), transparent),
+    radial-gradient(1100px 520px at 78% -8%, rgba(34, 211, 238, 0.10), transparent),
+    radial-gradient(900px 460px at 12% 4%, rgba(77, 124, 255, 0.10), transparent),
+    radial-gradient(1400px 700px at 50% 118%, rgba(255, 106, 43, 0.14), transparent),
     var(--bg);
+  background-attachment: fixed;
 }
 
 a {
@@ -66,7 +70,7 @@ button.primary {
   font-weight: 600;
 }
 
-input, select {
+input, select, textarea {
   font-family: inherit;
   background: var(--bg);
   color: var(--text);
@@ -150,7 +154,7 @@ th {
   font-weight: 800;
   font-size: 1.15rem;
   letter-spacing: 0.08em;
-  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  background: linear-gradient(90deg, var(--accent-2) 0%, #7aa2ff 50%, var(--accent-warm) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -164,6 +168,53 @@ th {
 }
 .nav .spacer {
   flex: 1;
+}
+
+/* Hero banner (domovská stránka) */
+.hero {
+  position: relative;
+  min-height: 320px;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  border: 1px solid var(--border);
+  background-color: #05060d;
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 0 50px rgba(34, 211, 238, 0.12),
+    0 0 80px rgba(255, 106, 43, 0.08),
+    inset 0 0 100px rgba(0, 0, 0, 0.55);
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 6, 13, 0.05) 0%,
+    rgba(5, 6, 13, 0.3) 55%,
+    rgba(7, 11, 24, 0.96) 100%
+  );
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 1.6rem;
+}
+.hero-tagline {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+}
+@media (max-width: 640px) {
+  .hero {
+    min-height: 200px;
+  }
 }
 
 /* Turnajový pavouk — profesionální bracket se spojnicemi */

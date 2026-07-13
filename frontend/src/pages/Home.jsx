@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next'
 import api from '../api/client'
 import { statusBadgeClass } from '../lib/labels'
 
+// public/hero.jpg — BASE_URL zajistí správnou cestu v dev ('/') i produkci ('/static/').
+const heroUrl = `${import.meta.env.BASE_URL}hero.jpg`
+
 export default function Home() {
   const { t } = useTranslation()
   const [featured, setFeatured] = useState(null)
@@ -21,11 +24,12 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="grid" style={{ gap: '2rem' }}>
-      <header>
-        <h1>{t('brand')}</h1>
-        <p className="muted">{t('home.subtitle')}</p>
-      </header>
+    <div className="grid" style={{ gap: '1.6rem' }}>
+      <section className="hero" style={{ backgroundImage: `url(${heroUrl})` }}>
+        <div className="hero-content">
+          <p className="hero-tagline">{t('home.subtitle')}</p>
+        </div>
+      </section>
 
       <section className="panel">
         <h3>{t('home.featured')}</h3>
