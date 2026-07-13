@@ -107,7 +107,7 @@ def _resolve_bye(match):
 def advance_winner(match):
     """Propíše vítěze zápasu do navazujícího slotu dalšího kola.
 
-    Volá se po zapsaní výsledku i při řešení bye. Idempotentní — přepíše slot
+    Volá se po zapsání výsledku i při řešení bye. Idempotentní — přepíše slot
     aktuálním vítězem (umožňuje opravu výsledku).
 
     Záměrně NEvolá ``_resolve_bye`` na navazující zápas: prázdný slot v druhém
