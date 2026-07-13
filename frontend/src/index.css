@@ -1,0 +1,216 @@
+/* Space Aces — tmavý sci-fi dashboard theme */
+
+:root {
+  --bg: #070b18;
+  --bg-panel: #0e1428;
+  --bg-panel-2: #131b34;
+  --border: #223056;
+  --border-glow: #2f6bff;
+  --text: #e6ecff;
+  --text-dim: #8a97c2;
+  --accent: #4d7cff;
+  --accent-2: #22d3ee;
+  --win: #34d399;
+  --lose: #f87171;
+  --radius: 10px;
+  --shadow-glow: 0 0 20px rgba(77, 124, 255, 0.15);
+
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(34, 211, 238, 0.08), transparent),
+    radial-gradient(1000px 500px at 0% 0%, rgba(77, 124, 255, 0.1), transparent),
+    var(--bg);
+}
+
+a {
+  color: var(--accent-2);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--text);
+}
+
+h1, h2, h3 {
+  letter-spacing: 0.02em;
+  margin: 0 0 0.5em;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg-panel-2);
+  color: var(--text);
+  padding: 0.5em 1em;
+  border-radius: var(--radius);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+button:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-glow);
+}
+button.primary {
+  background: linear-gradient(135deg, var(--accent), #6b4dff);
+  border-color: transparent;
+  font-weight: 600;
+}
+
+input, select {
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5em 0.7em;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  box-shadow: var(--shadow-glow);
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.muted {
+  color: var(--text-dim);
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.badge.live {
+  color: var(--accent-2);
+  border-color: var(--accent-2);
+}
+.badge.done {
+  color: var(--text-dim);
+}
+
+/* Tabulka */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  text-align: left;
+  padding: 0.6em 0.8em;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Navigace */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.8rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(7, 11, 24, 0.8);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-wrap: wrap;
+}
+.nav .brand {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.nav a {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.nav a.active, .nav a:hover {
+  color: var(--text);
+}
+.nav .spacer {
+  flex: 1;
+}
+
+/* Turnajový pavouk */
+.bracket {
+  display: flex;
+  gap: 2.5rem;
+  overflow-x: auto;
+  padding: 1rem 0.5rem;
+}
+.bracket-round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 1rem;
+  min-width: 190px;
+}
+.bracket-round h4 {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.3rem;
+}
+.match-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.match-team {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em 0.7em;
+  font-size: 0.9rem;
+}
+.match-team + .match-team {
+  border-top: 1px solid var(--border);
+}
+.match-team.winner {
+  color: var(--win);
+  font-weight: 600;
+}
+.match-team.tbd {
+  color: var(--text-dim);
+  font-style: italic;
+}
+.match-team .score {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+}
