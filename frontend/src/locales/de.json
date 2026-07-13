@@ -1,0 +1,96 @@
+{
+  "brand": "SPACE ACES",
+  "nav": {
+    "home": "Start",
+    "tournaments": "Turniere",
+    "archive": "Archiv",
+    "leaderboards": "Ranglisten",
+    "players": "Spieler",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "admin": "Admin"
+  },
+  "common": {
+    "loading": "Wird geladen…",
+    "error": "Etwas ist schiefgelaufen.",
+    "tbd": "Offen",
+    "vs": "vs",
+    "back": "Zurück",
+    "all": "Alle",
+    "none": "Noch nichts."
+  },
+  "home": {
+    "subtitle": "Clan-Turniere, Turnierbäume und Spieler-Ranglisten.",
+    "featured": "Ausgewähltes Turnier",
+    "noTournament": "Derzeit läuft kein aktives Turnier.",
+    "viewAll": "Alle Turniere anzeigen"
+  },
+  "status": {
+    "draft": "Vorbereitung",
+    "in_progress": "Läuft",
+    "completed": "Abgeschlossen"
+  },
+  "tournaments": {
+    "title": "Turniere",
+    "active": "Aktive Turniere",
+    "empty": "Keine aktiven Turniere.",
+    "format": "Format",
+    "type": "Baum",
+    "season": "Saison",
+    "created": "Erstellt"
+  },
+  "bracketType": {
+    "single": "Single Elimination",
+    "double": "Double Elimination"
+  },
+  "detail": {
+    "participants": "Teilnehmer",
+    "bracket": "Turnierbaum",
+    "noBracket": "Der Turnierbaum wurde noch nicht erstellt.",
+    "seed": "Setzung"
+  },
+  "round": {
+    "final": "Finale",
+    "semifinal": "Halbfinale",
+    "quarterfinal": "Viertelfinale",
+    "n": "Runde {{n}}"
+  },
+  "archive": {
+    "title": "Turnierarchiv",
+    "empty": "Noch keine abgeschlossenen Turniere."
+  },
+  "leaderboards": {
+    "title": "Ranglisten",
+    "format": "Format",
+    "season": "Saison",
+    "sortBy": "Sortieren nach",
+    "rank": "#",
+    "player": "Spieler",
+    "kd": "K/D",
+    "winRate": "Siegquote",
+    "wins": "Siege",
+    "kills": "Kills",
+    "matches": "Spiele",
+    "empty": "Noch keine Statistiken erfasst."
+  },
+  "players": {
+    "title": "Clan-Aufstellung",
+    "empty": "Noch keine Spieler registriert.",
+    "nick": "Nick",
+    "joined": "Beigetreten"
+  },
+  "playerDetail": {
+    "stats": "Karrierestatistik",
+    "kd": "K/D-Verhältnis",
+    "winRate": "Siegquote",
+    "matches": "Gespielte Spiele",
+    "wins": "Siege"
+  },
+  "login": {
+    "title": "Admin-Anmeldung",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "submit": "Anmelden",
+    "error": "Ungültiger Benutzername oder Passwort."
+  }
+}

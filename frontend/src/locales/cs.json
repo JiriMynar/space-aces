@@ -1,0 +1,96 @@
+{
+  "brand": "SPACE ACES",
+  "nav": {
+    "home": "Domů",
+    "tournaments": "Turnaje",
+    "archive": "Archiv",
+    "leaderboards": "Žebříčky",
+    "players": "Hráči",
+    "login": "Přihlásit",
+    "logout": "Odhlásit",
+    "admin": "Admin"
+  },
+  "common": {
+    "loading": "Načítání…",
+    "error": "Něco se pokazilo.",
+    "tbd": "Bude určeno",
+    "vs": "vs",
+    "back": "Zpět",
+    "all": "Vše",
+    "none": "Zatím nic."
+  },
+  "home": {
+    "subtitle": "Klanové turnaje, pavouky a žebříčky hráčů.",
+    "featured": "Vybraný turnaj",
+    "noTournament": "Žádný aktivní turnaj právě neběží.",
+    "viewAll": "Zobrazit všechny turnaje"
+  },
+  "status": {
+    "draft": "Příprava",
+    "in_progress": "Probíhá",
+    "completed": "Dokončeno"
+  },
+  "tournaments": {
+    "title": "Turnaje",
+    "active": "Aktivní turnaje",
+    "empty": "Žádné aktivní turnaje.",
+    "format": "Formát",
+    "type": "Pavouk",
+    "season": "Sezóna",
+    "created": "Vytvořeno"
+  },
+  "bracketType": {
+    "single": "Single elimination",
+    "double": "Double elimination"
+  },
+  "detail": {
+    "participants": "Účastníci",
+    "bracket": "Pavouk",
+    "noBracket": "Pavouk zatím nebyl vygenerován.",
+    "seed": "Nasazení"
+  },
+  "round": {
+    "final": "Finále",
+    "semifinal": "Semifinále",
+    "quarterfinal": "Čtvrtfinále",
+    "n": "Kolo {{n}}"
+  },
+  "archive": {
+    "title": "Archiv turnajů",
+    "empty": "Zatím žádné dokončené turnaje."
+  },
+  "leaderboards": {
+    "title": "Žebříčky",
+    "format": "Formát",
+    "season": "Sezóna",
+    "sortBy": "Řadit dle",
+    "rank": "#",
+    "player": "Hráč",
+    "kd": "K/D",
+    "winRate": "Win rate",
+    "wins": "Výhry",
+    "kills": "Killy",
+    "matches": "Zápasy",
+    "empty": "Zatím žádné statistiky."
+  },
+  "players": {
+    "title": "Soupiska klanu",
+    "empty": "Zatím žádní registrovaní hráči.",
+    "nick": "Nick",
+    "joined": "Registrace"
+  },
+  "playerDetail": {
+    "stats": "Kariérní statistiky",
+    "kd": "Poměr K/D",
+    "winRate": "Win rate",
+    "matches": "Odehrané zápasy",
+    "wins": "Výhry"
+  },
+  "login": {
+    "title": "Přihlášení admina",
+    "username": "Uživatelské jméno",
+    "password": "Heslo",
+    "submit": "Přihlásit se",
+    "error": "Neplatné jméno nebo heslo."
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "brand": "SPACE ACES",
+  "nav": {
+    "home": "Home",
+    "tournaments": "Tournaments",
+    "archive": "Archive",
+    "leaderboards": "Leaderboards",
+    "players": "Players",
+    "login": "Log in",
+    "logout": "Log out",
+    "admin": "Admin"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "tbd": "TBD",
+    "vs": "vs",
+    "back": "Back",
+    "all": "All",
+    "none": "None yet."
+  },
+  "home": {
+    "subtitle": "Clan tournaments, brackets and player rankings.",
+    "featured": "Featured tournament",
+    "noTournament": "No active tournament right now.",
+    "viewAll": "View all tournaments"
+  },
+  "status": {
+    "draft": "Preparation",
+    "in_progress": "Live",
+    "completed": "Completed"
+  },
+  "tournaments": {
+    "title": "Tournaments",
+    "active": "Active tournaments",
+    "empty": "No active tournaments.",
+    "format": "Format",
+    "type": "Bracket",
+    "season": "Season",
+    "created": "Created"
+  },
+  "bracketType": {
+    "single": "Single elimination",
+    "double": "Double elimination"
+  },
+  "detail": {
+    "participants": "Participants",
+    "bracket": "Bracket",
+    "noBracket": "The bracket has not been generated yet.",
+    "seed": "Seed"
+  },
+  "round": {
+    "final": "Final",
+    "semifinal": "Semifinal",
+    "quarterfinal": "Quarterfinal",
+    "n": "Round {{n}}"
+  },
+  "archive": {
+    "title": "Tournament archive",
+    "empty": "No completed tournaments yet."
+  },
+  "leaderboards": {
+    "title": "Leaderboards",
+    "format": "Format",
+    "season": "Season",
+    "sortBy": "Sort by",
+    "rank": "#",
+    "player": "Player",
+    "kd": "K/D",
+    "winRate": "Win rate",
+    "wins": "Wins",
+    "kills": "Kills",
+    "matches": "Matches",
+    "empty": "No stats recorded yet."
+  },
+  "players": {
+    "title": "Clan roster",
+    "empty": "No players registered yet.",
+    "nick": "Nick",
+    "joined": "Joined"
+  },
+  "playerDetail": {
+    "stats": "Career stats",
+    "kd": "K/D ratio",
+    "winRate": "Win rate",
+    "matches": "Matches played",
+    "wins": "Wins"
+  },
+  "login": {
+    "title": "Admin sign in",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Sign in",
+    "error": "Invalid username or password."
+  }
+}
