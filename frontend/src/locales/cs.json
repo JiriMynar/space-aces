@@ -46,6 +46,9 @@
     "single": "Single elimination",
     "double": "Double elimination"
   },
+  "bracket": {
+    "champion": "Šampion"
+  },
   "detail": {
     "participants": "Účastníci",
     "bracket": "Pavouk",
@@ -109,7 +112,7 @@
     "confirmDelete": "Opravdu smazat?",
     "playersTitle": "Správa hráčů",
     "newPlayer": "Nový hráč",
-    "editPlayer": "úprava hráče",
+    "editPlayer": "Úprava hráče",
     "gameId": "Herní ID",
     "avatarUrl": "URL avataru",
     "save": "Uložit",
@@ -141,6 +144,13 @@
     "enterScore": "Zadej obě skóre.",
     "noTie": "Musí být vítěz (žádná remíza).",
     "killsDeaths": "Killy / Deaths na hráče (volitelné)",
-    "saveResult": "Uložit výsledek"
+    "saveResult": "Uložit výsledek",
+    "bulkTitle": "Hromadné přidání hráčů",
+    "bulkHint": "Vlož jeden nick na řádek — vytvoří se všichni najednou.",
+    "bulkAddBtn": "Přidat všechny",
+    "bulkAdded": "Přidáno hráčů: {{count}}.",
+    "autoFillTeams": "Auto-vyplnit týmy z hráčů",
+    "autoFillHint": "Naskládá nezařazené hráče do týmů po {{size}}.",
+    "autoFillNone": "Žádní nezařazení hráči k dispozici."
   }
 }

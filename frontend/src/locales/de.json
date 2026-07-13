@@ -46,6 +46,9 @@
     "single": "Single Elimination",
     "double": "Double Elimination"
   },
+  "bracket": {
+    "champion": "Champion"
+  },
   "detail": {
     "participants": "Teilnehmer",
     "bracket": "Turnierbaum",
@@ -141,6 +144,13 @@
     "enterScore": "Beide Punktzahlen eingeben.",
     "noTie": "Es muss einen Sieger geben (kein Unentschieden).",
     "killsDeaths": "Kills / Deaths pro Spieler (optional)",
-    "saveResult": "Ergebnis speichern"
+    "saveResult": "Ergebnis speichern",
+    "bulkTitle": "Spieler massenweise hinzufügen",
+    "bulkHint": "Einen Nick pro Zeile einfügen — alle werden auf einmal erstellt.",
+    "bulkAddBtn": "Alle hinzufügen",
+    "bulkAdded": "{{count}} Spieler hinzugefügt.",
+    "autoFillTeams": "Teams automatisch aus Spielern füllen",
+    "autoFillHint": "Gruppiert nicht zugeordnete Spieler in Teams zu {{size}}.",
+    "autoFillNone": "Keine nicht zugeordneten Spieler verfügbar."
   }
 }

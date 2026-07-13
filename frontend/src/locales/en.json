@@ -46,6 +46,9 @@
     "single": "Single elimination",
     "double": "Double elimination"
   },
+  "bracket": {
+    "champion": "Champion"
+  },
   "detail": {
     "participants": "Participants",
     "bracket": "Bracket",
@@ -141,6 +144,13 @@
     "enterScore": "Enter both scores.",
     "noTie": "There must be a winner (no ties).",
     "killsDeaths": "Kills / Deaths per player (optional)",
-    "saveResult": "Save result"
+    "saveResult": "Save result",
+    "bulkTitle": "Bulk add players",
+    "bulkHint": "Paste one nick per line — all will be created at once.",
+    "bulkAddBtn": "Add all",
+    "bulkAdded": "{{count}} player(s) added.",
+    "autoFillTeams": "Auto-fill teams from players",
+    "autoFillHint": "Groups unassigned players into teams of {{size}}.",
+    "autoFillNone": "No unassigned players available."
   }
 }
