@@ -10,11 +10,31 @@ export default function AdminPlayers() {
   const [form, setForm] = useState(EMPTY)
   const [editingId, setEditingId] = useState(null)
   const [error, setError] = useState(null)
+  const [bulk, setBulk] = useState('')
+  const [bulkMsg, setBulkMsg] = useState(null)
 
   function load() {
     api.get('/players/').then(({ data }) => setPlayers(data.results || data))
   }
   useEffect(load, [])
+
+  async function bulkAdd(e) {
+    e.preventDefault()
+    setBulkMsg(null)
+    const nicks = [...new Set(bulk.split('\n').map((s) => s.trim()).filter(Boolean))]
+    let added = 0
+    for (const nick of nicks) {
+      try {
+        await api.post('/players/', { nick })
+        added += 1
+      } catch {
+        // přeskoč duplicity / chyby
+      }
+    }
+    setBulk('')
+    setBulkMsg(t('admin.bulkAdded', { count: added }))
+    load()
+  }
 
   async function submit(e) {
     e.preventDefault()
@@ -72,6 +92,20 @@ export default function AdminPlayers() {
             </button>
           )}
         </div>
+      </form>
+
+      <form onSubmit={bulkAdd} className="panel grid" style={{ gap: '0.7rem', maxWidth: 500 }}>
+        <h3 style={{ margin: 0 }}>{t('admin.bulkTitle')}</h3>
+        <p className="muted" style={{ margin: 0, fontSize: '0.85rem' }}>{t('admin.bulkHint')}</p>
+        <textarea
+          rows={5}
+          value={bulk}
+          onChange={(e) => setBulk(e.target.value)}
+          placeholder={'Nova\nMorits\nPasci'}
+          style={{ fontFamily: 'inherit', resize: 'vertical' }}
+        />
+        {bulkMsg && <p style={{ color: 'var(--win)' }}>{bulkMsg}</p>}
+        <button type="submit" className="primary" style={{ justifySelf: 'start' }}>{t('admin.bulkAddBtn')}</button>
       </form>
 
       <table className="panel" style={{ padding: 0 }}>

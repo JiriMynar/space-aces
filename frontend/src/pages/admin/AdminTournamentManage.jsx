@@ -123,6 +123,39 @@ function TeamsSection({ tournament, players, onChange, onGenerate }) {
     }
   }
 
+  // Automaticky naskládá dosud nezařazené hráče do týmů po `size`.
+  async function autoFill() {
+    setError(null)
+    const used = new Set(
+      tournament.teams.flatMap((team) => team.members.map((m) => m.id))
+    )
+    const available = players.filter((p) => !used.has(p.id))
+    // náhodné zamíchání
+    for (let i = available.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[available[i], available[j]] = [available[j], available[i]]
+    }
+    let created = 0
+    for (let i = 0; i + size <= available.length; i += size) {
+      const chunk = available.slice(i, i + size)
+      const teamName = size === 1
+        ? chunk[0].nick
+        : `${t('admin.team')} ${tournament.teams.length + created + 1}`
+      try {
+        await api.post('/teams/', {
+          tournament: tournament.id,
+          name: teamName,
+          member_ids: chunk.map((p) => p.id),
+        })
+        created += 1
+      } catch {
+        // přeskoč
+      }
+    }
+    if (created === 0) setError(t('admin.autoFillNone'))
+    onChange()
+  }
+
   return (
     <section className="panel grid" style={{ gap: '1rem' }}>
       <h3 style={{ margin: 0 }}>{t('admin.teams')} ({tournament.teams.length})</h3>
@@ -135,6 +168,15 @@ function TeamsSection({ tournament, players, onChange, onGenerate }) {
           </div>
         ))}
       </div>
+
+      {players.length > 0 && (
+        <div>
+          <button type="button" onClick={autoFill}>⚡ {t('admin.autoFillTeams')}</button>
+          <span className="muted" style={{ marginLeft: '0.6rem', fontSize: '0.85rem' }}>
+            {t('admin.autoFillHint', { size })}
+          </span>
+        </div>
+      )}
 
       <form onSubmit={addTeam} className="grid" style={{ gap: '0.6rem', maxWidth: 500 }}>
         <strong>{t('admin.addTeam')}</strong>
