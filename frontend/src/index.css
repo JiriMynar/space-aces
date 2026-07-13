@@ -166,51 +166,152 @@ th {
   flex: 1;
 }
 
-/* Turnajový pavouk */
+/* Turnajový pavouk — profesionální bracket se spojnicemi */
 .bracket {
+  --conn: 26px;
+  --line: var(--border);
   display: flex;
-  gap: 2.5rem;
+  align-items: stretch;
   overflow-x: auto;
-  padding: 1rem 0.5rem;
+  padding: 0.5rem 0.5rem 1.5rem;
 }
 .bracket-round {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  gap: 1rem;
-  min-width: 190px;
+  min-width: 210px;
 }
-.bracket-round h4 {
+.bracket-round-title {
+  text-align: center;
   color: var(--text-dim);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin: 0 0 0.3rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.6rem;
 }
+.bracket-round-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.bracket-match {
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0.4rem var(--conn) 0.4rem 0;
+}
+
+/* Spojnice ven doprava (všechna kola kromě posledního) */
+.bracket-round:not(:last-child) .bracket-match::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: var(--conn);
+  height: 50%;
+  border-right: 2px solid var(--line);
+}
+.bracket-round:not(:last-child) .bracket-match:nth-child(odd)::after {
+  top: 50%;
+  border-top: 2px solid var(--line);
+}
+.bracket-round:not(:last-child) .bracket-match:nth-child(even)::after {
+  bottom: 50%;
+  border-bottom: 2px solid var(--line);
+}
+/* Vodorovná spojnice dovnitř zleva (kola po prvním) */
+.bracket-round:not(:first-child) .bracket-match::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--conn));
+  top: 50%;
+  width: var(--conn);
+  height: 2px;
+  background: var(--line);
+}
+
 .match-card {
+  width: 100%;
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 8px;
   overflow: hidden;
 }
-.match-team {
+.bt-team {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.5em 0.7em;
   font-size: 0.9rem;
 }
-.match-team + .match-team {
+.bt-team + .bt-team {
   border-top: 1px solid var(--border);
 }
-.match-team.winner {
-  color: var(--win);
-  font-weight: 600;
+.bt-name {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.match-team.tbd {
+.bt-seed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.3em;
+  height: 1.3em;
+  padding: 0 0.25em;
+  border-radius: 4px;
+  background: var(--bg-panel-2);
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+}
+.bt-score {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+  min-width: 1.5em;
+  text-align: right;
+}
+.bt-team.bt-win {
+  color: var(--win);
+  font-weight: 700;
+}
+.bt-team.bt-win .bt-score {
+  color: var(--win);
+}
+.bt-team.bt-win::before {
+  content: "";
+  width: 3px;
+  align-self: stretch;
+  margin: -0.5em 0.4em -0.5em -0.7em;
+  background: var(--win);
+}
+.bt-team.bt-lose {
+  color: var(--text-dim);
+}
+.bt-team.bt-tbd {
   color: var(--text-dim);
   font-style: italic;
 }
-.match-team .score {
-  font-variant-numeric: tabular-nums;
-  color: var(--text-dim);
+
+/* Šampion */
+.bracket-champion {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1rem 0.8rem;
+  border: 1px solid var(--accent-2);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.12), transparent);
+  box-shadow: var(--shadow-glow);
+  font-weight: 700;
+  text-align: center;
+}
+.bracket-champion .bt-trophy {
+  font-size: 1.6rem;
 }
