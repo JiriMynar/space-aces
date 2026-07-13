@@ -8,7 +8,8 @@
     "players": "Hráči",
     "login": "Přihlásit",
     "logout": "Odhlásit",
-    "admin": "Admin"
+    "admin": "Admin",
+    "changePassword": "Změna hesla"
   },
   "common": {
     "loading": "Načítání…",
@@ -92,5 +93,14 @@
     "password": "Heslo",
     "submit": "Přihlásit se",
     "error": "Neplatné jméno nebo heslo."
+  },
+  "changePassword": {
+    "title": "Změna hesla",
+    "old": "Současné heslo",
+    "new": "Nové heslo (min. 8 znaků)",
+    "confirm": "Potvrzení nového hesla",
+    "submit": "Změnit heslo",
+    "success": "Heslo bylo úspěšně změněno.",
+    "mismatch": "Nová hesla se neshodují."
   }
 }

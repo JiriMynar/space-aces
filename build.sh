@@ -10,3 +10,6 @@ npm run build --prefix frontend
 pip install -r backend/requirements.txt
 python backend/manage.py collectstatic --no-input
 python backend/manage.py migrate
+
+# 3) Vytvoř admin účet z env proměnných (idempotentní — když existuje, přeskočí)
+python backend/manage.py init_admin

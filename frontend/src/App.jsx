@@ -9,6 +9,7 @@ import Leaderboards from './pages/Leaderboards'
 import Players from './pages/Players'
 import PlayerDetail from './pages/PlayerDetail'
 import Login from './pages/Login'
+import ChangePassword from './pages/ChangePassword'
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
             <Route path="players" element={<Players />} />
             <Route path="players/:id" element={<PlayerDetail />} />
             <Route path="login" element={<Login />} />
+            <Route path="change-password" element={<ChangePassword />} />
           </Route>
         </Routes>
       </BrowserRouter>

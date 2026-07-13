@@ -8,7 +8,8 @@
     "players": "Players",
     "login": "Log in",
     "logout": "Log out",
-    "admin": "Admin"
+    "admin": "Admin",
+    "changePassword": "Change password"
   },
   "common": {
     "loading": "Loading…",
@@ -92,5 +93,14 @@
     "password": "Password",
     "submit": "Sign in",
     "error": "Invalid username or password."
+  },
+  "changePassword": {
+    "title": "Change password",
+    "old": "Current password",
+    "new": "New password (min. 8 characters)",
+    "confirm": "Confirm new password",
+    "submit": "Change password",
+    "success": "Password changed successfully.",
+    "mismatch": "The new passwords do not match."
   }
 }

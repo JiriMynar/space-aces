@@ -22,3 +22,11 @@ services:
         fromDatabase:
           name: space-aces-db
           property: connectionString
+      # Úvodní admin účet — jméno je "admin", heslo zadáš v Renderu (sync: false
+      # znamená, že se tě Render při deployi zeptá a neuloží ho do repa).
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: admin@spaceaces.local
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false

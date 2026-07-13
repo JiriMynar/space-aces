@@ -27,7 +27,10 @@ export default function Layout() {
         <span className="spacer" />
         <LanguageSwitcher />
         {isAdmin ? (
-          <button onClick={handleLogout}>{t('nav.logout')}</button>
+          <>
+            <NavLink to="/change-password">{t('nav.changePassword')}</NavLink>
+            <button onClick={handleLogout}>{t('nav.logout')}</button>
+          </>
         ) : (
           <NavLink to="/login">{t('nav.login')}</NavLink>
         )}

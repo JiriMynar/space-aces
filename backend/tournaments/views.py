@@ -226,3 +226,29 @@ class LeaderboardView(APIView):
         )
         rows.sort(key=lambda r: r[sort_by], reverse=True)
         return Response(rows)
+
+
+class ChangePasswordView(APIView):
+    """Změna hesla přihlášeného uživatele. Vyžaduje současné + nové heslo."""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        old_password = request.data.get("old_password") or ""
+        new_password = request.data.get("new_password") or ""
+        user = request.user
+
+        if not user.check_password(old_password):
+            return Response(
+                {"detail": "Současné heslo není správné."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if len(new_password) < 8:
+            return Response(
+                {"detail": "Nové heslo musí mít aspoň 8 znaků."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user.set_password(new_password)
+        user.save()
+        return Response({"detail": "Heslo bylo změněno."})
