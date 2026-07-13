@@ -1,0 +1,2 @@
+# Skripty spouštěné na Linuxu (Render) musí mít LF konce řádků.
+*.sh text eol=lf
