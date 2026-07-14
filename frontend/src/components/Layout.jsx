@@ -34,6 +34,7 @@ export default function Layout() {
           <>
             <NavLink to="/admin/tournaments">⚙ {t('nav.adminTournaments')}</NavLink>
             <NavLink to="/admin/players">⚙ {t('nav.adminPlayers')}</NavLink>
+            <NavLink to="/admin/news">⚙ {t('nav.adminNews')}</NavLink>
             <NavLink to="/change-password">{t('nav.changePassword')}</NavLink>
             <button onClick={handleLogout}>{t('nav.logout')}</button>
           </>
