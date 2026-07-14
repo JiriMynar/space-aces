@@ -215,48 +215,106 @@ th {
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
 }
 
-/* Síň slávy (stupeň vítězů) */
-.hall {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* Domovská stránka — bez rámečků, obsah přímo ve stránce */
+.home {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 1.4rem;
 }
-.hall li {
+.home-intro {
+  margin: 0;
+  max-width: 720px;
+  line-height: 1.7;
+  color: var(--text-dim);
+  font-size: 1.02rem;
+}
+.section-title {
+  font-size: 1.25rem;
+  margin: 0 0 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Stupeň vítězů (TOP 3) */
+.podium {
   display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
+}
+.podium-place {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
-  padding: 0.55rem 0.7rem;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid transparent;
+  flex: 0 1 168px;
+  min-width: 94px;
 }
-.hall li:first-child {
-  background: linear-gradient(90deg, rgba(255, 196, 0, 0.14), rgba(255, 196, 0, 0.02));
-  border-color: rgba(255, 196, 0, 0.3);
+.podium-medal {
+  font-size: 2rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
 }
-.hall-rank {
-  font-size: 1.2rem;
-  min-width: 1.9rem;
+.podium-name {
+  margin-top: 0.3rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
   text-align: center;
 }
-.hall-name {
-  flex: 1;
-  font-weight: 600;
-  color: var(--text);
-}
-.hall-stats {
+.podium-ach {
   display: flex;
-  gap: 0.9rem;
-  font-size: 0.92rem;
+  gap: 0.7rem;
+  margin: 0.25rem 0 0.6rem;
+  font-size: 0.9rem;
   color: var(--text-dim);
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
 }
-.hall-stats .t {
+.podium-ach .ach-title {
   color: var(--accent-warm);
+  font-weight: 600;
+}
+.podium-bar {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.5rem;
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 800;
+  font-size: 1.3rem;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25), 0 0 22px rgba(0, 0, 0, 0.3);
+}
+.podium-place.p1 .podium-bar {
+  height: 120px;
+  background: linear-gradient(180deg, #ffe17a, #c99a17);
+}
+.podium-place.p2 .podium-bar {
+  height: 88px;
+  background: linear-gradient(180deg, #dde3ec, #97a0ad);
+}
+.podium-place.p3 .podium-bar {
+  height: 62px;
+  background: linear-gradient(180deg, #e6ad76, #a56a34);
+}
+.podium-legend {
+  text-align: center;
+  font-size: 0.8rem;
+  margin: 0.4rem 0 0;
+}
+
+/* Vybraný turnaj (inline, bez rámečku) */
+.home-featured .featured-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.featured-name {
+  font-size: 1.2rem;
   font-weight: 600;
 }
 

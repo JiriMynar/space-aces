@@ -4,79 +4,83 @@ import { useTranslation } from 'react-i18next'
 import api from '../api/client'
 import { statusBadgeClass } from '../lib/labels'
 
-function rankMedal(index) {
-  return ['🥇', '🥈', '🥉'][index] || `#${index + 1}`
-}
+const MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' }
 
 export default function Home() {
   const { t } = useTranslation()
   const [featured, setFeatured] = useState(null)
   const [hof, setHof] = useState([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     api.get('/tournaments/').then(({ data }) => {
       const list = data.results || data
-      const live = list.find((tourn) => tourn.status === 'in_progress')
-      const draft = list.find((tourn) => tourn.status === 'draft')
+      const live = list.find((x) => x.status === 'in_progress')
+      const draft = list.find((x) => x.status === 'draft')
       setFeatured(live || draft || null)
-      setLoading(false)
     })
     api.get('/hall-of-fame/').then(({ data }) => setHof(data)).catch(() => setHof([]))
   }, [])
 
+  const top3 = hof.slice(0, 3)
+  // Vizuální pořadí stupňů: 2. vlevo, 1. uprostřed, 3. vpravo.
+  const podium = [
+    top3[1] && { player: top3[1], place: 2 },
+    top3[0] && { player: top3[0], place: 1 },
+    top3[2] && { player: top3[2], place: 3 },
+  ].filter(Boolean)
+
   return (
-    <div className="grid" style={{ gap: '1.6rem' }}>
+    <div className="home">
       <header className="home-hero">
         <h1>{t('brand')}</h1>
         <p>{t('home.subtitle')}</p>
       </header>
 
-      <section className="panel">
-        <h3>{t('home.introTitle')}</h3>
-        <p className="muted" style={{ margin: 0, lineHeight: 1.6 }}>{t('home.introText')}</p>
-      </section>
+      <p className="home-intro">{t('home.introText')}</p>
 
-      <section className="panel">
-        <h3>🏆 {t('home.hallOfFame')}</h3>
+      <section>
+        <h2 className="section-title">🏆 {t('home.hallOfFame')}</h2>
         {hof.length === 0 ? (
-          <p className="muted" style={{ margin: 0 }}>{t('home.noChampions')}</p>
+          <p className="muted">{t('home.noChampions')}</p>
         ) : (
           <>
-            <ol className="hall">
-              {hof.slice(0, 5).map((p, i) => (
-                <li key={p.id}>
-                  <span className="hall-rank">{rankMedal(i)}</span>
-                  <Link to={`/players/${p.id}`} className="hall-name">{p.nick}</Link>
-                  <span className="hall-stats">
-                    {p.titles > 0 && (
-                      <span className="t" title={t('home.titlesLabel')}>👑 {p.titles}</span>
+            <div className="podium">
+              {podium.map(({ player, place }) => (
+                <div className={`podium-place p${place}`} key={player.id}>
+                  <div className="podium-medal">{MEDALS[place]}</div>
+                  <Link to={`/players/${player.id}`} className="podium-name">
+                    {player.nick}
+                  </Link>
+                  <div className="podium-ach">
+                    {player.titles > 0 && (
+                      <span className="ach-title" title={t('home.titlesLabel')}>👑 {player.titles}</span>
                     )}
-                    <span title={t('home.top3Label')}>🏆 {p.podiums}</span>
-                  </span>
-                </li>
+                    <span title={t('home.top3Label')}>🏆 {player.podiums}</span>
+                  </div>
+                  <div className="podium-bar">
+                    <span className="podium-num">{place}</span>
+                  </div>
+                </div>
               ))}
-            </ol>
-            <div className="muted" style={{ fontSize: '0.8rem', marginTop: '0.6rem' }}>
-              👑 {t('home.titlesLabel')} · 🏆 {t('home.top3Label')}
             </div>
+            <p className="podium-legend muted">
+              👑 {t('home.titlesLabel')} · 🏆 {t('home.top3Label')}
+            </p>
           </>
         )}
       </section>
 
-      <section className="panel">
-        <h3>{t('home.featured')}</h3>
-        {loading ? (
-          <p className="muted">{t('common.loading')}</p>
-        ) : featured ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <div style={{ flex: 1, minWidth: 200 }}>
-              <Link to={`/tournaments/${featured.id}`} style={{ fontSize: '1.3rem' }}>
+      <section className="home-featured">
+        <h2 className="section-title">{t('home.featured')}</h2>
+        {featured ? (
+          <div className="featured-inline">
+            <div>
+              <Link to={`/tournaments/${featured.id}`} className="featured-name">
                 {featured.name}
               </Link>
-              <div className="muted" style={{ marginTop: '0.3rem' }}>
-                {featured.format_label} · {t(`bracketType.${featured.bracket_type}`)}
-              </div>
+              <span className="muted">
+                {' '}· {featured.format_label} · {t(`bracketType.${featured.bracket_type}`)}
+              </span>
             </div>
             <span className={statusBadgeClass(featured.status)}>
               {t(`status.${featured.status}`)}
@@ -87,7 +91,7 @@ export default function Home() {
         )}
       </section>
 
-      <Link to="/tournaments">{t('home.viewAll')} →</Link>
+      <Link to="/tournaments" className="home-viewall">{t('home.viewAll')} →</Link>
     </div>
   )
 }
