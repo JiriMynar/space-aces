@@ -24,6 +24,12 @@
   },
   "home": {
     "subtitle": "Clan tournaments, brackets and player rankings.",
+    "introTitle": "Internal clan tournaments",
+    "introText": "This site is where the Space Aces clan runs and follows its internal tournaments — an overview of upcoming and past events, match brackets and player rankings, all in one place.",
+    "hallOfFame": "Hall of Fame",
+    "titlesLabel": "titles",
+    "top3Label": "top 3 finishes",
+    "noChampions": "No champions yet — finish your first tournament.",
     "featured": "Featured tournament",
     "noTournament": "No active tournament right now.",
     "viewAll": "View all tournaments"

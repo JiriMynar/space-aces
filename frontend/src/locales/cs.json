@@ -24,6 +24,12 @@
   },
   "home": {
     "subtitle": "Klanové turnaje, pavouky a žebříčky hráčů.",
+    "introTitle": "Interní turnaje klanu",
+    "introText": "Tahle stránka slouží klanu Space Aces k pořádání a sledování interních turnajů — přehled nadcházejících i proběhlých akcí, turnajové pavouky a žebříčky hráčů na jednom místě.",
+    "hallOfFame": "Síň slávy",
+    "titlesLabel": "titulů",
+    "top3Label": "umístění v top 3",
+    "noChampions": "Zatím žádní šampioni — dokonči první turnaj.",
     "featured": "Vybraný turnaj",
     "noTournament": "Žádný aktivní turnaj právě neběží.",
     "viewAll": "Zobrazit všechny turnaje"

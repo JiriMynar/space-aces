@@ -24,6 +24,12 @@
   },
   "home": {
     "subtitle": "Clan-Turniere, Turnierbäume und Spieler-Ranglisten.",
+    "introTitle": "Interne Clan-Turniere",
+    "introText": "Auf dieser Seite organisiert und verfolgt der Clan Space Aces seine internen Turniere — eine Übersicht kommender und vergangener Events, Turnierbäume und Spieler-Ranglisten an einem Ort.",
+    "hallOfFame": "Ruhmeshalle",
+    "titlesLabel": "Titel",
+    "top3Label": "Top-3-Platzierungen",
+    "noChampions": "Noch keine Champions — beende dein erstes Turnier.",
     "featured": "Ausgewähltes Turnier",
     "noTournament": "Derzeit läuft kein aktives Turnier.",
     "viewAll": "Alle Turniere anzeigen"
