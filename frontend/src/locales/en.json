@@ -185,6 +185,13 @@
     "needNameAndPlayers": "Enter a name and pick at least one player.",
     "addFromSaved": "Add from saved team",
     "saveTeamTemplate": "Save team for reuse",
-    "teamSaved": "Team saved for future use."
+    "teamSaved": "Team saved for future use.",
+    "compositionTitle": "Whole line-up (all teams)",
+    "shuffleTeams": "Shuffle teams",
+    "saveComposition": "Save line-up",
+    "loadComposition": "Load saved line-up",
+    "compositionNamePrompt": "Name this line-up (e.g. Spring League 2026):",
+    "compositionSaved": "Line-up saved — reuse it in any tournament.",
+    "teamsWord": "teams"
   }
 }

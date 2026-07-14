@@ -185,6 +185,13 @@
     "needNameAndPlayers": "Namen eingeben und mindestens einen Spieler wählen.",
     "addFromSaved": "Aus gespeichertem Team",
     "saveTeamTemplate": "Team zur Wiederverwendung speichern",
-    "teamSaved": "Team für die spätere Nutzung gespeichert."
+    "teamSaved": "Team für die spätere Nutzung gespeichert.",
+    "compositionTitle": "Gesamte Aufstellung (alle Teams)",
+    "shuffleTeams": "Teams mischen",
+    "saveComposition": "Aufstellung speichern",
+    "loadComposition": "Gespeicherte Aufstellung laden",
+    "compositionNamePrompt": "Aufstellung benennen (z. B. Frühlingsliga 2026):",
+    "compositionSaved": "Aufstellung gespeichert — in jedem Turnier wiederverwendbar.",
+    "teamsWord": "Teams"
   }
 }

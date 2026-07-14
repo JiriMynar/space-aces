@@ -190,12 +190,58 @@ function TeamsSection({ tournament, players, onChange }) {
   const [error, setError] = useState(null)
   const [teams, setTeams] = useState(tournament.teams)
   const [savedTeams, setSavedTeams] = useState([])
+  const [teamSets, setTeamSets] = useState([])
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
 
   useEffect(() => { setTeams(tournament.teams) }, [tournament.teams])
   useEffect(() => {
     api.get('/saved-teams/').then(({ data }) => setSavedTeams(data.results || data)).catch(() => {})
   }, [])
+
+  const reloadTeamSets = useCallback(() => {
+    api.get(`/team-sets/?team_size=${size}`).then(({ data }) => setTeamSets(data.results || data)).catch(() => {})
+  }, [size])
+  useEffect(() => { reloadTeamSets() }, [reloadTeamSets])
+
+  // --- Celé složení turnaje (všechny týmy najednou) + zamíchání ---
+  async function shuffleTeams() {
+    setError(null)
+    try {
+      await api.post(`/tournaments/${tournament.id}/shuffle_teams/`, {})
+      onChange()
+    } catch (err) {
+      setError(err.response?.data?.detail || t('common.error'))
+    }
+  }
+
+  async function saveComposition() {
+    const compName = window.prompt(t('admin.compositionNamePrompt'))
+    if (!compName) return
+    try {
+      await api.post(`/tournaments/${tournament.id}/save_teamset/`, { name: compName })
+      reloadTeamSets()
+      alert(t('admin.compositionSaved'))
+    } catch (err) {
+      alert(err.response?.data?.detail || t('common.error'))
+    }
+  }
+
+  async function applyComposition(setId) {
+    if (!setId) return
+    setError(null)
+    try {
+      await api.post(`/tournaments/${tournament.id}/apply_teamset/`, { team_set: Number(setId) })
+      onChange()
+    } catch (err) {
+      setError(err.response?.data?.detail || t('common.error'))
+    }
+  }
+
+  async function deleteComposition(setId) {
+    if (!window.confirm(t('admin.confirmDelete'))) return
+    await api.delete(`/team-sets/${setId}/`)
+    reloadTeamSets()
+  }
 
   // Uložené sestavy odpovídající velikosti tohoto turnaje.
   const matchingSaved = savedTeams.filter((s) => s.size === size)
@@ -310,6 +356,35 @@ function TeamsSection({ tournament, players, onChange }) {
           </div>
         </SortableContext>
       </DndContext>
+
+      <div className="grid" style={{ gap: '0.5rem', padding: '0.7rem', border: '1px solid var(--border)', borderRadius: '8px' }}>
+        <strong>{t('admin.compositionTitle')}</strong>
+        <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <button type="button" onClick={shuffleTeams} disabled={teams.length < 1}>🔀 {t('admin.shuffleTeams')}</button>
+          <button type="button" onClick={saveComposition} disabled={teams.length < 1}>💾 {t('admin.saveComposition')}</button>
+          {teamSets.length > 0 && (
+            <label>
+              <span className="muted" style={{ fontSize: '0.85rem', marginRight: '0.4rem' }}>{t('admin.loadComposition')}:</span>
+              <select value="" onChange={(e) => { applyComposition(e.target.value); e.target.value = '' }}>
+                <option value="">—</option>
+                {teamSets.map((s) => (
+                  <option key={s.id} value={s.id}>{s.name} ({s.team_count} {t('admin.teamsWord')})</option>
+                ))}
+              </select>
+            </label>
+          )}
+        </div>
+        {teamSets.length > 0 && (
+          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+            {teamSets.map((s) => (
+              <span key={s.id} className="saved-player">
+                {s.name} ({s.team_count})
+                <button type="button" onClick={() => deleteComposition(s.id)} title={t('admin.delete')} style={{ padding: '0 0.35em', marginLeft: '0.3rem', fontSize: '0.75rem' }}>✕</button>
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
 
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
         {players.length > 0 && (
