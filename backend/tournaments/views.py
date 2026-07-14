@@ -9,11 +9,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .bracket import advance_winner, generate_single_elimination
-from .models import Match, MatchStat, Player, Team, Tournament
+from .models import Match, MatchStat, News, Player, Team, Tournament
 from .serializers import (
     GenerateBracketSerializer,
     MatchResultSerializer,
     MatchSerializer,
+    NewsSerializer,
     PlayerSerializer,
     ReorderSerializer,
     TeamSerializer,
@@ -45,6 +46,14 @@ class TeamViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     permission_classes = [IsAdminOrReadOnly]
     filterset_fields = ["tournament"]
+
+
+class NewsViewSet(viewsets.ModelViewSet):
+    """Novinky/oznámení klanu. Čtení pro všechny, správa jen admin."""
+
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class TournamentViewSet(viewsets.ModelViewSet):
@@ -80,6 +89,9 @@ class TournamentViewSet(viewsets.ModelViewSet):
 
         if seeding == Tournament.Seeding.RATING:
             teams.sort(key=self._team_rating, reverse=True)
+        elif seeding == Tournament.Seeding.MANUAL:
+            # Zachovej pořadí nastavené adminem (drag & drop) přes team.seed.
+            teams.sort(key=lambda team: (team.seed is None, team.seed or 0))
         else:
             random.shuffle(teams)
 
@@ -102,20 +114,30 @@ class TournamentViewSet(viewsets.ModelViewSet):
     def set_status(self, request, pk=None):
         tournament = self.get_object()
         target = request.data.get("status")
-        valid = {
-            Tournament.Status.DRAFT: Tournament.Status.IN_PROGRESS,
-            Tournament.Status.IN_PROGRESS: Tournament.Status.COMPLETED,
+        # Povolené přechody — dopředu i zpět (bezpečnostní síť pro překlepy).
+        allowed = {
+            Tournament.Status.DRAFT: {Tournament.Status.IN_PROGRESS},
+            Tournament.Status.IN_PROGRESS: {
+                Tournament.Status.DRAFT,
+                Tournament.Status.COMPLETED,
+            },
+            Tournament.Status.COMPLETED: {Tournament.Status.IN_PROGRESS},
         }
-        if valid.get(tournament.status) != target:
+        if target not in allowed.get(tournament.status, set()):
             return Response(
                 {"detail": f"Neplatný přechod z '{tournament.status}' na '{target}'."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         tournament.status = target
-        if target == Tournament.Status.IN_PROGRESS:
+        if target == Tournament.Status.IN_PROGRESS and not tournament.started_at:
             tournament.started_at = timezone.now()
-        elif target == Tournament.Status.COMPLETED:
+        if target == Tournament.Status.COMPLETED:
             tournament.completed_at = timezone.now()
+        elif target == Tournament.Status.DRAFT:
+            tournament.started_at = None
+            tournament.completed_at = None
+        elif target == Tournament.Status.IN_PROGRESS:
+            tournament.completed_at = None
         tournament.save()
         return Response(TournamentDetailSerializer(tournament).data)
 

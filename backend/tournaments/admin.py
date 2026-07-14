@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import (
     Match,
     MatchStat,
+    News,
     Player,
     Round,
     Team,
@@ -52,3 +53,9 @@ class MatchAdmin(admin.ModelAdmin):
     list_display = ("__str__", "round", "status", "winner")
     list_filter = ("status", "round__tournament")
     inlines = [MatchStatInline]
+
+
+@admin.register(News)
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ("title", "created_at")
+    search_fields = ("title", "body")

@@ -1,7 +1,7 @@
 """Logika generování a průchodu turnajovým pavoukem.
 
 Zatím single elimination (default). Double elimination je připravené v datovém
-modelu (``Round.bracket_side``) a doplní se později.
+modelu (``Round.bracket_side``, ``Match.loser_next_match``) a doplní se později.
 """
 
 import math
@@ -105,20 +105,29 @@ def _resolve_bye(match):
 
 
 def advance_winner(match):
-    """Propíše vítěze zápasu do navazujícího slotu dalšího kola.
+    """Propíše vítěze do navazujícího slotu (a u double elim i poraženého).
 
-    Volá se po zapsání výsledku i při řešení bye. Idempotentní — přepíše slot
-    aktuálním vítězem (umožňuje opravu výsledku).
+    Volá se po zapsaní výsledku i při řešení bye. Idempotentní — přepíše sloty
+    aktuálním vítězem/poraženým (umožňuje opravu výsledku).
 
     Záměrně NEvolá ``_resolve_bye`` na navazující zápas: prázdný slot v druhém
     a dalších kolech znamená "čeká na vítěze jiného zápasu", ne bye. Bye existuje
     jen v prvním kole (tam ho vyřeší :func:`generate_single_elimination`).
     """
-    if not match.next_match or not match.winner:
+    if not match.winner:
         return
-    nm = match.next_match
-    if match.next_slot == Match.NextSlot.A:
-        nm.team_a = match.winner
+    loser = match.team_a if match.winner_id == match.team_b_id else match.team_b
+    _assign_slot(match.next_match, match.next_slot, match.winner)
+    if loser is not None:
+        _assign_slot(match.loser_next_match, match.loser_next_slot, loser)
+
+
+def _assign_slot(target, slot, team):
+    """Vloží tým do slotu (a/b) cílového zápasu, pokud cíl a slot existují."""
+    if not target or not slot:
+        return
+    if slot == Match.NextSlot.A:
+        target.team_a = team
     else:
-        nm.team_b = match.winner
-    nm.save()
+        target.team_b = team
+    target.save()

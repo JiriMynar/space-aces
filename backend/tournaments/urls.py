@@ -9,6 +9,7 @@ from .views import (
     HallOfFameView,
     LeaderboardView,
     MatchViewSet,
+    NewsViewSet,
     PlayerViewSet,
     TeamViewSet,
     TournamentViewSet,
@@ -19,6 +20,7 @@ router.register("tournaments", TournamentViewSet)
 router.register("players", PlayerViewSet)
 router.register("teams", TeamViewSet)
 router.register("matches", MatchViewSet)
+router.register("news", NewsViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),

@@ -5,6 +5,7 @@ from rest_framework import serializers
 from .models import (
     Match,
     MatchStat,
+    News,
     Player,
     Round,
     Team,
@@ -165,3 +166,10 @@ class MatchResultSerializer(serializers.Serializer):
     score_a = serializers.IntegerField(min_value=0)
     score_b = serializers.IntegerField(min_value=0)
     stats = MatchStatSerializer(many=True, required=False)
+
+
+class NewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = News
+        fields = ["id", "title", "body", "created_at"]
+        read_only_fields = ["created_at"]

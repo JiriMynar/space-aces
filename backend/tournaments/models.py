@@ -38,6 +38,7 @@ class Tournament(models.Model):
     class Seeding(models.TextChoices):
         RANDOM = "random", "Náhodně"
         RATING = "rating", "Podle ratingu (K/D)"
+        MANUAL = "manual", "Ruční pořadí (drag & drop)"
 
     name = models.CharField(max_length=200)
     # Počet hráčů v týmu: 1 = 1v1, 2 = 2v2, ... 5 = 5v5.
@@ -175,6 +176,14 @@ class Match(models.Model):
         max_length=1, choices=NextSlot.choices, null=True, blank=True
     )
 
+    # Kam padá poražený (jen double elimination — do losers bracketu).
+    loser_next_match = models.ForeignKey(
+        "self", on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
+    )
+    loser_next_slot = models.CharField(
+        max_length=1, choices=NextSlot.choices, null=True, blank=True
+    )
+
     played_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
@@ -206,3 +215,18 @@ class MatchStat(models.Model):
 
     def __str__(self):
         return f"{self.player.nick}: {self.kills}/{self.deaths}"
+
+
+class News(models.Model):
+    """Novinka / oznámení klanu zobrazené na domovské stránce."""
+
+    title = models.CharField(max_length=200)
+    body = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name_plural = "news"
+
+    def __str__(self):
+        return self.title
