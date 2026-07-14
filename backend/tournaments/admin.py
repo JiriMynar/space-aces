@@ -6,6 +6,7 @@ from .models import (
     News,
     Player,
     Round,
+    SavedTeam,
     Team,
     TeamMembership,
     Tournament,
@@ -59,3 +60,9 @@ class MatchAdmin(admin.ModelAdmin):
 class NewsAdmin(admin.ModelAdmin):
     list_display = ("title", "created_at")
     search_fields = ("title", "body")
+
+
+@admin.register(SavedTeam)
+class SavedTeamAdmin(admin.ModelAdmin):
+    list_display = ("name", "created_at")
+    filter_horizontal = ("members",)

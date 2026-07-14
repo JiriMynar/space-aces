@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .bracket import advance_winner, generate_single_elimination
-from .models import Match, MatchStat, News, Player, Team, Tournament
+from .models import Match, MatchStat, News, Player, SavedTeam, Team, Tournament
 from .serializers import (
     GenerateBracketSerializer,
     MatchResultSerializer,
@@ -17,6 +17,7 @@ from .serializers import (
     NewsSerializer,
     PlayerSerializer,
     ReorderSerializer,
+    SavedTeamSerializer,
     TeamSerializer,
     TournamentDetailSerializer,
     TournamentListSerializer,
@@ -53,6 +54,14 @@ class NewsViewSet(viewsets.ModelViewSet):
 
     queryset = News.objects.all()
     serializer_class = NewsSerializer
+    permission_classes = [IsAdminOrReadOnly]
+
+
+class SavedTeamViewSet(viewsets.ModelViewSet):
+    """Uložené sestavy týmů pro opakované použití (klonování do turnajů)."""
+
+    queryset = SavedTeam.objects.prefetch_related("members").all()
+    serializer_class = SavedTeamSerializer
     permission_classes = [IsAdminOrReadOnly]
 
 

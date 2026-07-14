@@ -230,3 +230,20 @@ class News(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class SavedTeam(models.Model):
+    """Uložená sestava týmu pro opakované použití napříč turnaji (klonování).
+
+    Nezávislá na turnaji — při použití se z ní vytvoří ad-hoc :class:`Team`.
+    """
+
+    name = models.CharField(max_length=120)
+    members = models.ManyToManyField(Player, related_name="saved_teams")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
