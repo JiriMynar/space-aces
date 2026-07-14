@@ -11,7 +11,8 @@
     "admin": "Admin",
     "changePassword": "Passwort ändern",
     "adminTournaments": "Turniere verwalten",
-    "adminPlayers": "Spieler verwalten"
+    "adminPlayers": "Spieler verwalten",
+    "adminNews": "News verwalten"
   },
   "common": {
     "loading": "Wird geladen…",
@@ -26,6 +27,7 @@
     "subtitle": "Clan-Turniere, Turnierbäume und Spieler-Ranglisten.",
     "introTitle": "Interne Clan-Turniere",
     "introText": "Auf dieser Seite organisiert und verfolgt der Clan Space Aces seine internen Turniere — eine Übersicht kommender und vergangener Events, Turnierbäume und Spieler-Ranglisten an einem Ort.",
+    "news": "Clan-News",
     "hallOfFame": "Ruhmeshalle",
     "titlesLabel": "Titel",
     "top3Label": "Top-3-Platzierungen",
@@ -157,6 +159,20 @@
     "bulkAdded": "{{count}} Spieler hinzugefügt.",
     "autoFillTeams": "Teams automatisch aus Spielern füllen",
     "autoFillHint": "Gruppiert nicht zugeordnete Spieler in Teams zu {{size}}.",
-    "autoFillNone": "Keine nicht zugeordneten Spieler verfügbar."
+    "autoFillNone": "Keine nicht zugeordneten Spieler verfügbar.",
+    "revertToDraft": "Zurück zur Vorbereitung",
+    "reopen": "Wieder öffnen",
+    "generateFirst": "Erst den Turnierbaum erstellen, dann starten.",
+    "editTournament": "Turnier bearbeiten",
+    "description": "Beschreibung",
+    "teamsHint": "Ziehen für die Setzung, Teams umbenennen oder entfernen — dann Turnierbaum erstellen.",
+    "dragToOrder": "Zum Umsortieren ziehen",
+    "seedingManual": "Manuell (Reihenfolge)",
+    "editResult": "Ergebnis korrigieren",
+    "newsTitle": "News verwalten",
+    "editNews": "News bearbeiten",
+    "newNews": "Neue News",
+    "newsHeadline": "Überschrift",
+    "newsBody": "Text (optional)"
   }
 }

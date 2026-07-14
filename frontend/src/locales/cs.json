@@ -11,7 +11,8 @@
     "admin": "Admin",
     "changePassword": "Změna hesla",
     "adminTournaments": "Správa turnajů",
-    "adminPlayers": "Správa hráčů"
+    "adminPlayers": "Správa hráčů",
+    "adminNews": "Správa novinek"
   },
   "common": {
     "loading": "Načítání…",
@@ -26,6 +27,7 @@
     "subtitle": "Klanové turnaje, pavouky a žebříčky hráčů.",
     "introTitle": "Interní turnaje klanu",
     "introText": "Tahle stránka slouží klanu Space Aces k pořádání a sledování interních turnajů — přehled nadcházejících i proběhlých akcí, turnajové pavouky a žebříčky hráčů na jednom místě.",
+    "news": "Novinky klanu",
     "hallOfFame": "Síň slávy",
     "titlesLabel": "titulů",
     "top3Label": "umístění v top 3",
@@ -157,6 +159,20 @@
     "bulkAdded": "Přidáno hráčů: {{count}}.",
     "autoFillTeams": "Auto-vyplnit týmy z hráčů",
     "autoFillHint": "Naskládá nezařazené hráče do týmů po {{size}}.",
-    "autoFillNone": "Žádní nezařazení hráči k dispozici."
+    "autoFillNone": "Žádní nezařazení hráči k dispozici.",
+    "revertToDraft": "Vrátit do přípravy",
+    "reopen": "Znovu otevřít",
+    "generateFirst": "Nejdřív vygeneruj pavouk, pak můžeš spustit.",
+    "editTournament": "Upravit turnaj",
+    "description": "Popis",
+    "teamsHint": "Přetažením nastav pořadí (nasazení), přejmenuj nebo odeber týmy — pak vygeneruj pavouk.",
+    "dragToOrder": "Přetáhni pro změnu pořadí",
+    "seedingManual": "Ruční (dle pořadí)",
+    "editResult": "Opravit výsledek",
+    "newsTitle": "Správa novinek",
+    "editNews": "Upravit novinku",
+    "newNews": "Nová novinka",
+    "newsHeadline": "Nadpis",
+    "newsBody": "Text (volitelné)"
   }
 }

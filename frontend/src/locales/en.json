@@ -11,7 +11,8 @@
     "admin": "Admin",
     "changePassword": "Change password",
     "adminTournaments": "Manage tournaments",
-    "adminPlayers": "Manage players"
+    "adminPlayers": "Manage players",
+    "adminNews": "Manage news"
   },
   "common": {
     "loading": "Loading…",
@@ -26,6 +27,7 @@
     "subtitle": "Clan tournaments, brackets and player rankings.",
     "introTitle": "Internal clan tournaments",
     "introText": "This site is where the Space Aces clan runs and follows its internal tournaments — an overview of upcoming and past events, match brackets and player rankings, all in one place.",
+    "news": "Clan news",
     "hallOfFame": "Hall of Fame",
     "titlesLabel": "titles",
     "top3Label": "top 3 finishes",
@@ -157,6 +159,20 @@
     "bulkAdded": "{{count}} player(s) added.",
     "autoFillTeams": "Auto-fill teams from players",
     "autoFillHint": "Groups unassigned players into teams of {{size}}.",
-    "autoFillNone": "No unassigned players available."
+    "autoFillNone": "No unassigned players available.",
+    "revertToDraft": "Back to preparation",
+    "reopen": "Reopen",
+    "generateFirst": "Generate the bracket first, then you can start.",
+    "editTournament": "Edit tournament",
+    "description": "Description",
+    "teamsHint": "Drag to set the seed order, rename or remove teams — then generate the bracket.",
+    "dragToOrder": "Drag to reorder",
+    "seedingManual": "Manual (drag order)",
+    "editResult": "Edit result",
+    "newsTitle": "Manage news",
+    "editNews": "Edit news",
+    "newNews": "New news",
+    "newsHeadline": "Headline",
+    "newsBody": "Text (optional)"
   }
 }

@@ -64,6 +64,10 @@ button:hover {
   border-color: var(--border-glow);
   box-shadow: var(--shadow-glow);
 }
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 button.primary {
   background: linear-gradient(135deg, var(--accent), #6b4dff);
   border-color: transparent;
@@ -316,6 +320,60 @@ th {
 .featured-name {
   font-size: 1.2rem;
   font-weight: 600;
+}
+
+/* Avatar */
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  background: var(--bg-panel-2);
+}
+.avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--accent-2);
+  text-transform: uppercase;
+}
+
+/* Novinky na Domů */
+.news-item {
+  border-left: 3px solid var(--accent-warm);
+  padding: 0.2rem 0 0.2rem 0.9rem;
+}
+
+/* Ruční nasazení (drag & drop) */
+.seed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.seed-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+}
+.seed-handle {
+  cursor: grab;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  user-select: none;
+  touch-action: none;
+}
+.seed-handle:active {
+  cursor: grabbing;
+}
+.seed-num {
+  min-width: 2rem;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
 }
 
 /* Turnajový pavouk — profesionální bracket se spojnicemi */
