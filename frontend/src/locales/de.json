@@ -12,6 +12,7 @@
     "changePassword": "Passwort ändern",
     "adminTournaments": "Turniere verwalten",
     "adminPlayers": "Spieler verwalten",
+    "adminSavedTeams": "Gespeicherte Teams",
     "adminNews": "News verwalten"
   },
   "common": {
@@ -173,6 +174,17 @@
     "editNews": "News bearbeiten",
     "newNews": "Neue News",
     "newsHeadline": "Überschrift",
-    "newsBody": "Text (optional)"
+    "newsBody": "Text (optional)",
+    "savedTeamsTitle": "Gespeicherte Teams",
+    "savedTeamsHint": "Speichere eine Team-Aufstellung einmal und nutze sie in jedem Turnier mit einem Klick.",
+    "newSavedTeam": "Neues gespeichertes Team",
+    "editSavedTeam": "Gespeichertes Team bearbeiten",
+    "savedTeamName": "Teamname",
+    "selectPlayers": "Spieler auswählen",
+    "players": "Spieler",
+    "needNameAndPlayers": "Namen eingeben und mindestens einen Spieler wählen.",
+    "addFromSaved": "Aus gespeichertem Team",
+    "saveTeamTemplate": "Team zur Wiederverwendung speichern",
+    "teamSaved": "Team für die spätere Nutzung gespeichert."
   }
 }

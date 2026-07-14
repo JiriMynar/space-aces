@@ -154,7 +154,7 @@ function EditTournamentForm({ tournament, onSaved }) {
   )
 }
 
-function SortableTeamRow({ team, onRename, onDelete }) {
+function SortableTeamRow({ team, onRename, onDelete, onSave }) {
   const { t } = useTranslation()
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: team.id })
   const style = {
@@ -175,6 +175,7 @@ function SortableTeamRow({ team, onRename, onDelete }) {
         style={{ flex: 1, padding: '0.3em 0.5em' }}
       />
       <span className="muted" style={{ fontSize: '0.8rem' }}>{team.members.map((m) => m.nick).join(', ')}</span>
+      <button type="button" onClick={() => onSave(team)} title={t('admin.saveTeamTemplate')}>💾</button>
       <button type="button" onClick={() => onDelete(team.id)} title={t('admin.delete')}>✕</button>
     </div>
   )
@@ -188,9 +189,45 @@ function TeamsSection({ tournament, players, onChange }) {
   const [seeding, setSeeding] = useState('random')
   const [error, setError] = useState(null)
   const [teams, setTeams] = useState(tournament.teams)
+  const [savedTeams, setSavedTeams] = useState([])
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
 
   useEffect(() => { setTeams(tournament.teams) }, [tournament.teams])
+  useEffect(() => {
+    api.get('/saved-teams/').then(({ data }) => setSavedTeams(data.results || data)).catch(() => {})
+  }, [])
+
+  // Uložené sestavy odpovídající velikosti tohoto turnaje.
+  const matchingSaved = savedTeams.filter((s) => s.size === size)
+
+  async function cloneSaved(savedId) {
+    const saved = savedTeams.find((s) => s.id === Number(savedId))
+    if (!saved) return
+    try {
+      await api.post('/teams/', {
+        tournament: tournament.id,
+        name: saved.name,
+        member_ids: saved.members.map((m) => m.id),
+      })
+      onChange()
+    } catch (err) {
+      setError(err.response?.data ? JSON.stringify(err.response.data) : t('common.error'))
+    }
+  }
+
+  async function saveAsTemplate(team) {
+    try {
+      await api.post('/saved-teams/', {
+        name: team.name,
+        member_ids: team.members.map((m) => m.id),
+      })
+      const { data } = await api.get('/saved-teams/')
+      setSavedTeams(data.results || data)
+      alert(t('admin.teamSaved'))
+    } catch (err) {
+      alert(err.response?.data ? JSON.stringify(err.response.data) : t('common.error'))
+    }
+  }
 
   async function addTeam(e) {
     e.preventDefault()
@@ -268,18 +305,31 @@ function TeamsSection({ tournament, players, onChange }) {
         <SortableContext items={teams.map((tm) => tm.id)} strategy={verticalListSortingStrategy}>
           <div className="seed-list">
             {teams.map((tm) => (
-              <SortableTeamRow key={tm.id} team={tm} onRename={renameTeam} onDelete={deleteTeam} />
+              <SortableTeamRow key={tm.id} team={tm} onRename={renameTeam} onDelete={deleteTeam} onSave={saveAsTemplate} />
             ))}
           </div>
         </SortableContext>
       </DndContext>
 
-      {players.length > 0 && (
-        <div>
-          <button type="button" onClick={autoFill}>⚡ {t('admin.autoFillTeams')}</button>
-          <span className="muted" style={{ marginLeft: '0.6rem', fontSize: '0.85rem' }}>{t('admin.autoFillHint', { size })}</span>
-        </div>
-      )}
+      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+        {players.length > 0 && (
+          <div>
+            <button type="button" onClick={autoFill}>⚡ {t('admin.autoFillTeams')}</button>
+            <span className="muted" style={{ marginLeft: '0.6rem', fontSize: '0.85rem' }}>{t('admin.autoFillHint', { size })}</span>
+          </div>
+        )}
+        {matchingSaved.length > 0 && (
+          <label>
+            <span className="muted" style={{ fontSize: '0.85rem', marginRight: '0.4rem' }}>{t('admin.addFromSaved')}:</span>
+            <select value="" onChange={(e) => { if (e.target.value) cloneSaved(e.target.value); e.target.value = '' }}>
+              <option value="">—</option>
+              {matchingSaved.map((s) => (
+                <option key={s.id} value={s.id}>{s.name} ({s.members.map((m) => m.nick).join(', ')})</option>
+              ))}
+            </select>
+          </label>
+        )}
+      </div>
 
       <form onSubmit={addTeam} className="grid" style={{ gap: '0.6rem', maxWidth: 500 }}>
         <strong>{t('admin.addTeam')}</strong>

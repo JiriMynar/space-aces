@@ -12,6 +12,7 @@
     "changePassword": "Změna hesla",
     "adminTournaments": "Správa turnajů",
     "adminPlayers": "Správa hráčů",
+    "adminSavedTeams": "Uložené týmy",
     "adminNews": "Správa novinek"
   },
   "common": {
@@ -120,7 +121,7 @@
     "confirmDelete": "Opravdu smazat?",
     "playersTitle": "Správa hráčů",
     "newPlayer": "Nový hráč",
-    "editPlayer": "Úprava hráče",
+    "editPlayer": "úprava hráče",
     "gameId": "Herní ID",
     "avatarUrl": "URL avataru",
     "save": "Uložit",
@@ -173,6 +174,17 @@
     "editNews": "Upravit novinku",
     "newNews": "Nová novinka",
     "newsHeadline": "Nadpis",
-    "newsBody": "Text (volitelné)"
+    "newsBody": "Text (volitelné)",
+    "savedTeamsTitle": "Uložené týmy",
+    "savedTeamsHint": "Ulož sestavu týmu jednou a použij ji v libovolném turnaji jedním klikem.",
+    "newSavedTeam": "Nový uložený tým",
+    "editSavedTeam": "Upravit uložený tým",
+    "savedTeamName": "Název týmu",
+    "selectPlayers": "Vyber hráče",
+    "players": "Hráči",
+    "needNameAndPlayers": "Zadej název a vyber aspoň jednoho hráče.",
+    "addFromSaved": "Přidat z uloženého týmu",
+    "saveTeamTemplate": "Uložit tým pro příště",
+    "teamSaved": "Tým uložen pro příští použití."
   }
 }

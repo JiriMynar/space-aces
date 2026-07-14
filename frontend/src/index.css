@@ -376,6 +376,36 @@ th {
   font-size: 0.85rem;
 }
 
+/* Uložené týmy — výběr hráčů */
+.saved-players {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  max-height: 230px;
+  overflow-y: auto;
+  padding: 0.2rem 0;
+}
+.saved-player {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3em 0.7em;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-size: 0.9rem;
+  user-select: none;
+  transition: border-color 0.12s, color 0.12s;
+}
+.saved-player.on {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+  background: rgba(34, 211, 238, 0.08);
+}
+.saved-player input {
+  display: none;
+}
+
 /* Turnajový pavouk — profesionální bracket se spojnicemi */
 .bracket {
   --conn: 26px;

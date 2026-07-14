@@ -12,6 +12,7 @@
     "changePassword": "Change password",
     "adminTournaments": "Manage tournaments",
     "adminPlayers": "Manage players",
+    "adminSavedTeams": "Saved teams",
     "adminNews": "Manage news"
   },
   "common": {
@@ -173,6 +174,17 @@
     "editNews": "Edit news",
     "newNews": "New news",
     "newsHeadline": "Headline",
-    "newsBody": "Text (optional)"
+    "newsBody": "Text (optional)",
+    "savedTeamsTitle": "Saved teams",
+    "savedTeamsHint": "Save a team roster once and reuse it in any tournament with one click.",
+    "newSavedTeam": "New saved team",
+    "editSavedTeam": "Edit saved team",
+    "savedTeamName": "Team name",
+    "selectPlayers": "Select players",
+    "players": "Players",
+    "needNameAndPlayers": "Enter a name and pick at least one player.",
+    "addFromSaved": "Add from saved team",
+    "saveTeamTemplate": "Save team for reuse",
+    "teamSaved": "Team saved for future use."
   }
 }
