@@ -9,7 +9,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .bracket import advance_winner, generate_single_elimination
-from .models import Match, MatchStat, News, Player, SavedTeam, Team, Tournament
+from .models import (
+    Match,
+    MatchStat,
+    News,
+    Player,
+    SavedTeam,
+    Team,
+    TeamMembership,
+    TeamSet,
+    TeamSetTeam,
+    Tournament,
+)
 from .serializers import (
     GenerateBracketSerializer,
     MatchResultSerializer,
@@ -19,6 +30,7 @@ from .serializers import (
     ReorderSerializer,
     SavedTeamSerializer,
     TeamSerializer,
+    TeamSetSerializer,
     TournamentDetailSerializer,
     TournamentListSerializer,
 )
@@ -63,6 +75,15 @@ class SavedTeamViewSet(viewsets.ModelViewSet):
     queryset = SavedTeam.objects.prefetch_related("members").all()
     serializer_class = SavedTeamSerializer
     permission_classes = [IsAdminOrReadOnly]
+
+
+class TeamSetViewSet(viewsets.ModelViewSet):
+    """Uložená složení celých turnajů (sady týmů) — čtení/mazání pro adminy."""
+
+    queryset = TeamSet.objects.prefetch_related("teams__members").all()
+    serializer_class = TeamSetSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    filterset_fields = ["team_size"]
 
 
 class TournamentViewSet(viewsets.ModelViewSet):
@@ -188,6 +209,81 @@ class TournamentViewSet(viewsets.ModelViewSet):
         else:
             match.team_b = team
         match.save()
+        return Response(TournamentDetailSerializer(tournament).data)
+
+    @action(detail=True, methods=["post"])
+    def shuffle_teams(self, request, pk=None):
+        """Náhodně přemíchá hráče mezi týmy (zachová počet týmů i velikost)."""
+        tournament = self.get_object()
+        if not tournament.is_editable:
+            return Response(
+                {"detail": "Týmy lze míchat jen ve stavu přípravy."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        teams = list(tournament.teams.all())
+        pool = [member for team in teams for member in team.members.all()]
+        if not pool:
+            return Response(
+                {"detail": "Není koho míchat — týmy nemají hráče."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        random.shuffle(pool)
+        size = tournament.team_size
+        idx = 0
+        for team in teams:
+            chunk = pool[idx : idx + size]
+            idx += size
+            team.memberships.all().delete()
+            for player in chunk:
+                TeamMembership.objects.create(team=team, player=player)
+        return Response(TournamentDetailSerializer(tournament).data)
+
+    @action(detail=True, methods=["post"])
+    def save_teamset(self, request, pk=None):
+        """Uloží aktuální složení (všechny týmy) jako pojmenovanou šablonu."""
+        tournament = self.get_object()
+        name = (request.data.get("name") or "").strip()
+        if not name:
+            return Response(
+                {"detail": "Zadej název složení."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        teams = list(tournament.teams.all())
+        if not teams:
+            return Response(
+                {"detail": "Turnaj nemá žádné týmy k uložení."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        team_set = TeamSet.objects.create(
+            name=name, team_size=tournament.team_size
+        )
+        for team in teams:
+            set_team = TeamSetTeam.objects.create(team_set=team_set, name=team.name)
+            set_team.members.set(team.members.all())
+        return Response(
+            TeamSetSerializer(team_set).data, status=status.HTTP_201_CREATED
+        )
+
+    @action(detail=True, methods=["post"])
+    def apply_teamset(self, request, pk=None):
+        """Načte uložené složení — vytvoří v tomto turnaji všechny jeho týmy."""
+        tournament = self.get_object()
+        if not tournament.is_editable:
+            return Response(
+                {"detail": "Složení lze načíst jen ve stavu přípravy."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            team_set = TeamSet.objects.get(pk=request.data.get("team_set"))
+        except (TeamSet.DoesNotExist, ValueError, TypeError):
+            return Response(
+                {"detail": "Uložené složení nenalezeno."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        for set_team in team_set.teams.all():
+            team = Team.objects.create(tournament=tournament, name=set_team.name)
+            for player in set_team.members.all():
+                TeamMembership.objects.create(team=team, player=player)
         return Response(TournamentDetailSerializer(tournament).data)
 
 

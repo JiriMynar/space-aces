@@ -9,6 +9,8 @@ from .models import (
     SavedTeam,
     Team,
     TeamMembership,
+    TeamSet,
+    TeamSetTeam,
     Tournament,
 )
 
@@ -66,3 +68,15 @@ class NewsAdmin(admin.ModelAdmin):
 class SavedTeamAdmin(admin.ModelAdmin):
     list_display = ("name", "created_at")
     filter_horizontal = ("members",)
+
+
+class TeamSetTeamInline(admin.TabularInline):
+    model = TeamSetTeam
+    extra = 0
+    filter_horizontal = ("members",)
+
+
+@admin.register(TeamSet)
+class TeamSetAdmin(admin.ModelAdmin):
+    list_display = ("name", "team_size", "created_at")
+    inlines = [TeamSetTeamInline]

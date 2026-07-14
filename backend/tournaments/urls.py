@@ -12,6 +12,7 @@ from .views import (
     NewsViewSet,
     PlayerViewSet,
     SavedTeamViewSet,
+    TeamSetViewSet,
     TeamViewSet,
     TournamentViewSet,
 )
@@ -23,6 +24,7 @@ router.register("teams", TeamViewSet)
 router.register("matches", MatchViewSet)
 router.register("news", NewsViewSet)
 router.register("saved-teams", SavedTeamViewSet)
+router.register("team-sets", TeamSetViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),

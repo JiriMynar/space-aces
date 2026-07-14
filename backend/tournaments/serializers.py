@@ -11,6 +11,8 @@ from .models import (
     SavedTeam,
     Team,
     TeamMembership,
+    TeamSet,
+    TeamSetTeam,
     Tournament,
 )
 from .stats import player_stats
@@ -196,3 +198,24 @@ class SavedTeamSerializer(serializers.ModelSerializer):
 
     def get_size(self, obj):
         return obj.members.count()
+
+
+class TeamSetTeamSerializer(serializers.ModelSerializer):
+    members = PlayerMiniSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = TeamSetTeam
+        fields = ["id", "name", "members"]
+
+
+class TeamSetSerializer(serializers.ModelSerializer):
+    teams = TeamSetTeamSerializer(many=True, read_only=True)
+    team_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = TeamSet
+        fields = ["id", "name", "team_size", "teams", "team_count", "created_at"]
+        read_only_fields = ["created_at"]
+
+    def get_team_count(self, obj):
+        return obj.teams.count()
