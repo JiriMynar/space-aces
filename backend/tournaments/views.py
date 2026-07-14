@@ -20,7 +20,7 @@ from .serializers import (
     TournamentDetailSerializer,
     TournamentListSerializer,
 )
-from .stats import leaderboard, player_stats
+from .stats import hall_of_fame, leaderboard, player_stats
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -226,6 +226,15 @@ class LeaderboardView(APIView):
         )
         rows.sort(key=lambda r: r[sort_by], reverse=True)
         return Response(rows)
+
+
+class HallOfFameView(APIView):
+    """Síň slávy — hráči podle počtu vyhraných turnajů + poháry (top 3)."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        return Response(hall_of_fame())
 
 
 class ChangePasswordView(APIView):
