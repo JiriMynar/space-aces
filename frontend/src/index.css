@@ -183,7 +183,6 @@ th {
   pointer-events: none;
 }
 .app-bg::after {
-  /* tmavý závoj, aby zůstal obsah čitelný a obrázek působil jen jako podklad */
   content: "";
   position: absolute;
   inset: 0;
@@ -214,6 +213,51 @@ th {
   font-size: 1.1rem;
   color: var(--text);
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+}
+
+/* Síň slávy (stupeň vítězů) */
+.hall {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.hall li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+}
+.hall li:first-child {
+  background: linear-gradient(90deg, rgba(255, 196, 0, 0.14), rgba(255, 196, 0, 0.02));
+  border-color: rgba(255, 196, 0, 0.3);
+}
+.hall-rank {
+  font-size: 1.2rem;
+  min-width: 1.9rem;
+  text-align: center;
+}
+.hall-name {
+  flex: 1;
+  font-weight: 600;
+  color: var(--text);
+}
+.hall-stats {
+  display: flex;
+  gap: 0.9rem;
+  font-size: 0.92rem;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.hall-stats .t {
+  color: var(--accent-warm);
+  font-weight: 600;
 }
 
 /* Turnajový pavouk — profesionální bracket se spojnicemi */

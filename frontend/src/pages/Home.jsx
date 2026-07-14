@@ -4,20 +4,25 @@ import { useTranslation } from 'react-i18next'
 import api from '../api/client'
 import { statusBadgeClass } from '../lib/labels'
 
+function rankMedal(index) {
+  return ['🥇', '🥈', '🥉'][index] || `#${index + 1}`
+}
+
 export default function Home() {
   const { t } = useTranslation()
   const [featured, setFeatured] = useState(null)
+  const [hof, setHof] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     api.get('/tournaments/').then(({ data }) => {
       const list = data.results || data
-      // Preferuj probíhající, jinak turnaj v přípravě.
       const live = list.find((tourn) => tourn.status === 'in_progress')
       const draft = list.find((tourn) => tourn.status === 'draft')
       setFeatured(live || draft || null)
       setLoading(false)
     })
+    api.get('/hall-of-fame/').then(({ data }) => setHof(data)).catch(() => setHof([]))
   }, [])
 
   return (
@@ -26,6 +31,38 @@ export default function Home() {
         <h1>{t('brand')}</h1>
         <p>{t('home.subtitle')}</p>
       </header>
+
+      <section className="panel">
+        <h3>{t('home.introTitle')}</h3>
+        <p className="muted" style={{ margin: 0, lineHeight: 1.6 }}>{t('home.introText')}</p>
+      </section>
+
+      <section className="panel">
+        <h3>🏆 {t('home.hallOfFame')}</h3>
+        {hof.length === 0 ? (
+          <p className="muted" style={{ margin: 0 }}>{t('home.noChampions')}</p>
+        ) : (
+          <>
+            <ol className="hall">
+              {hof.slice(0, 5).map((p, i) => (
+                <li key={p.id}>
+                  <span className="hall-rank">{rankMedal(i)}</span>
+                  <Link to={`/players/${p.id}`} className="hall-name">{p.nick}</Link>
+                  <span className="hall-stats">
+                    {p.titles > 0 && (
+                      <span className="t" title={t('home.titlesLabel')}>👑 {p.titles}</span>
+                    )}
+                    <span title={t('home.top3Label')}>🏆 {p.podiums}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <div className="muted" style={{ fontSize: '0.8rem', marginTop: '0.6rem' }}>
+              👑 {t('home.titlesLabel')} · 🏆 {t('home.top3Label')}
+            </div>
+          </>
+        )}
+      </section>
 
       <section className="panel">
         <h3>{t('home.featured')}</h3>
