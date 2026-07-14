@@ -62,20 +62,7 @@ export default function AdminTournaments() {
             ))}
           </select>
         </label>
-        <label>
-          <div className="muted" style={{ fontSize: '0.8rem' }}>{t('tournaments.type')}</div>
-          <select value={form.bracket_type} onChange={(e) => setForm({ ...form, bracket_type: e.target.value })}>
-            <option value="single">{t('bracketType.single')}</option>
-            <option value="double">{t('bracketType.double')}</option>
-          </select>
-        </label>
-        <label>
-          <div className="muted" style={{ fontSize: '0.8rem' }}>{t('admin.seeding')}</div>
-          <select value={form.seeding_method} onChange={(e) => setForm({ ...form, seeding_method: e.target.value })}>
-            <option value="random">{t('admin.seedingRandom')}</option>
-            <option value="rating">{t('admin.seedingRating')}</option>
-          </select>
-        </label>
+        {/* Double elimination zatím není implementované — zůstává jen single. */}
         <input
           placeholder={t('tournaments.season') + ' (2026-S1)'}
           value={form.season}

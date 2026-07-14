@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import api from '../api/client'
+import Avatar from '../components/Avatar'
 
 export default function Players() {
   const { t } = useTranslation()
@@ -35,7 +36,12 @@ export default function Players() {
           <tbody>
             {items.map((p) => (
               <tr key={p.id}>
-                <td><Link to={`/players/${p.id}`}>{p.nick}</Link></td>
+                <td>
+                  <Link to={`/players/${p.id}`} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                    <Avatar player={p} size={30} />
+                    {p.nick}
+                  </Link>
+                </td>
                 <td>{p.stats.kd}</td>
                 <td>{Math.round(p.stats.win_rate * 100)}%</td>
                 <td>{p.stats.matches}</td>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import api from '../api/client'
+import Avatar from '../components/Avatar'
 
 function StatTile({ label, value }) {
   return (
@@ -34,8 +35,13 @@ export default function PlayerDetail() {
     <div className="grid" style={{ gap: '1.5rem' }}>
       <div>
         <Link to="/players" className="muted">← {t('common.back')}</Link>
-        <h1 style={{ marginTop: '0.5rem' }}>{player.nick}</h1>
-        {player.game_id && <p className="muted">ID: {player.game_id}</p>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', marginTop: '0.5rem' }}>
+          <Avatar player={player} size={64} />
+          <div>
+            <h1 style={{ margin: 0 }}>{player.nick}</h1>
+            {player.game_id && <p className="muted" style={{ margin: 0 }}>ID: {player.game_id}</p>}
+          </div>
+        </div>
       </div>
 
       <section>
