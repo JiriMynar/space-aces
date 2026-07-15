@@ -3,6 +3,8 @@
 from rest_framework import serializers
 
 from .models import (
+    Attendance,
+    Event,
     Match,
     MatchStat,
     News,
@@ -14,7 +16,7 @@ from .models import (
     TeamSetTeam,
     Tournament,
 )
-from .stats import player_stats
+from .stats import player_activity, player_stats
 
 
 class PlayerSerializer(serializers.ModelSerializer):
@@ -27,6 +29,18 @@ class PlayerSerializer(serializers.ModelSerializer):
 
     def get_stats(self, obj):
         return player_stats(obj)
+
+
+class PlayerDetailSerializer(PlayerSerializer):
+    """Detail hráče navíc s klanovou aktivitou (drahé — jen pro jednoho hráče)."""
+
+    activity = serializers.SerializerMethodField()
+
+    class Meta(PlayerSerializer.Meta):
+        fields = PlayerSerializer.Meta.fields + ["activity"]
+
+    def get_activity(self, obj):
+        return player_activity(obj)
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):
@@ -210,3 +224,54 @@ class TeamSetSerializer(serializers.ModelSerializer):
 
     def get_team_count(self, obj):
         return obj.teams.count()
+
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    nick = serializers.CharField(source="player.nick", read_only=True)
+    avatar_url = serializers.CharField(source="player.avatar_url", read_only=True)
+
+    class Meta:
+        model = Attendance
+        fields = ["id", "player", "nick", "avatar_url", "present"]
+
+
+class EventListSerializer(serializers.ModelSerializer):
+    present_count = serializers.SerializerMethodField()
+    marked_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Event
+        fields = [
+            "id",
+            "name",
+            "event_date",
+            "description",
+            "present_count",
+            "marked_count",
+            "created_at",
+        ]
+        read_only_fields = ["created_at"]
+
+    def get_present_count(self, obj):
+        return sum(1 for a in obj.attendance.all() if a.present)
+
+    def get_marked_count(self, obj):
+        return obj.attendance.count()
+
+
+class EventDetailSerializer(EventListSerializer):
+    attendance = AttendanceSerializer(many=True, read_only=True)
+
+    class Meta(EventListSerializer.Meta):
+        fields = EventListSerializer.Meta.fields + ["attendance"]
+
+
+class AttendanceEntrySerializer(serializers.Serializer):
+    """Jeden řádek hromadného zápisu docházky."""
+
+    player = serializers.PrimaryKeyRelatedField(queryset=Player.objects.all())
+    present = serializers.BooleanField()
+
+
+class SetAttendanceSerializer(serializers.Serializer):
+    entries = AttendanceEntrySerializer(many=True)

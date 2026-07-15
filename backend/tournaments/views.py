@@ -10,6 +10,8 @@ from rest_framework.views import APIView
 
 from .bracket import advance_winner, generate_league, generate_single_elimination
 from .models import (
+    Attendance,
+    Event,
     Match,
     MatchStat,
     News,
@@ -21,18 +23,28 @@ from .models import (
     Tournament,
 )
 from .serializers import (
+    EventDetailSerializer,
+    EventListSerializer,
     GenerateBracketSerializer,
     MatchResultSerializer,
     MatchSerializer,
     NewsSerializer,
+    PlayerDetailSerializer,
     PlayerSerializer,
     ReorderSerializer,
+    SetAttendanceSerializer,
     TeamSerializer,
     TeamSetSerializer,
     TournamentDetailSerializer,
     TournamentListSerializer,
 )
-from .stats import hall_of_fame, leaderboard, league_table, player_stats
+from .stats import (
+    activity_board,
+    hall_of_fame,
+    leaderboard,
+    league_table,
+    player_stats,
+)
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -51,6 +63,12 @@ class PlayerViewSet(viewsets.ModelViewSet):
     search_fields = ["nick", "game_id"]
     ordering_fields = ["nick", "joined_at"]
 
+    def get_serializer_class(self):
+        # Aktivita se počítá jen v detailu — v seznamu by to bylo N+1.
+        if self.action == "retrieve":
+            return PlayerDetailSerializer
+        return PlayerSerializer
+
 
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
@@ -65,6 +83,33 @@ class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
     permission_classes = [IsAdminOrReadOnly]
+
+
+class EventViewSet(viewsets.ModelViewSet):
+    """Klanové akce s docházkou. Čtení pro všechny, správa jen admin."""
+
+    queryset = Event.objects.prefetch_related("attendance__player").all()
+    permission_classes = [IsAdminOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return EventListSerializer
+        return EventDetailSerializer
+
+    @action(detail=True, methods=["post"])
+    def set_attendance(self, request, pk=None):
+        """Hromadný zápis docházky: [{player, present}, ...]. Idempotentní."""
+        event = self.get_object()
+        serializer = SetAttendanceSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        for row in serializer.validated_data["entries"]:
+            Attendance.objects.update_or_create(
+                event=event,
+                player=row["player"],
+                defaults={"present": row["present"]},
+            )
+        event = self.get_queryset().get(pk=event.pk)
+        return Response(EventDetailSerializer(event).data)
 
 
 class TeamSetViewSet(viewsets.ModelViewSet):
@@ -396,6 +441,15 @@ class HallOfFameView(APIView):
 
     def get(self, request):
         return Response(hall_of_fame())
+
+
+class ActivityView(APIView):
+    """Žebříček klanové aktivity — docházka na akcích + účast v turnajích."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        return Response(activity_board())
 
 
 class LastResultView(APIView):
