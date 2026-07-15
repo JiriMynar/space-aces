@@ -12,7 +12,6 @@
     "changePassword": "Change password",
     "adminTournaments": "Manage tournaments",
     "adminPlayers": "Manage players",
-    "adminSavedTeams": "Saved teams",
     "adminNews": "Manage news"
   },
   "common": {
@@ -175,23 +174,17 @@
     "newNews": "New news",
     "newsHeadline": "Headline",
     "newsBody": "Text (optional)",
-    "savedTeamsTitle": "Saved teams",
-    "savedTeamsHint": "Save a team roster once and reuse it in any tournament with one click.",
-    "newSavedTeam": "New saved team",
-    "editSavedTeam": "Edit saved team",
-    "savedTeamName": "Team name",
-    "selectPlayers": "Select players",
-    "players": "Players",
-    "needNameAndPlayers": "Enter a name and pick at least one player.",
-    "addFromSaved": "Add from saved team",
-    "saveTeamTemplate": "Save team for reuse",
-    "teamSaved": "Team saved for future use.",
     "compositionTitle": "Whole line-up (all teams)",
-    "shuffleTeams": "Shuffle teams",
     "saveComposition": "Save line-up",
     "loadComposition": "Load saved line-up",
     "compositionNamePrompt": "Name this line-up (e.g. Spring League 2026):",
     "compositionSaved": "Line-up saved — reuse it in any tournament.",
-    "teamsWord": "teams"
+    "teamsWord": "teams",
+    "shuffleSeeds": "Shuffle team order",
+    "shuffleSeedsHint": "Randomly reseed the teams — changes who plays whom in the bracket.",
+    "shufflePlayers": "Shuffle players",
+    "shufflePlayersHint": "Randomly redistribute players across the teams.",
+    "loadLineupOnCreate": "Load a saved line-up (optional)",
+    "lineupNone": "— none (empty tournament) —"
   }
 }

@@ -15,7 +15,6 @@ import AdminPlayers from './pages/admin/AdminPlayers'
 import AdminTournaments from './pages/admin/AdminTournaments'
 import AdminTournamentManage from './pages/admin/AdminTournamentManage'
 import AdminNews from './pages/admin/AdminNews'
-import AdminSavedTeams from './pages/admin/AdminSavedTeams'
 
 export default function App() {
   return (
@@ -36,7 +35,6 @@ export default function App() {
             <Route path="admin/tournaments" element={<ProtectedRoute><AdminTournaments /></ProtectedRoute>} />
             <Route path="admin/tournaments/:id" element={<ProtectedRoute><AdminTournamentManage /></ProtectedRoute>} />
             <Route path="admin/news" element={<ProtectedRoute><AdminNews /></ProtectedRoute>} />
-            <Route path="admin/saved-teams" element={<ProtectedRoute><AdminSavedTeams /></ProtectedRoute>} />
           </Route>
         </Routes>
       </BrowserRouter>

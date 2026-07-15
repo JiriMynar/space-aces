@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import api from '../../api/client'
 import { statusBadgeClass } from '../../lib/labels'
@@ -15,22 +15,38 @@ const EMPTY = {
 
 export default function AdminTournaments() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [items, setItems] = useState([])
   const [form, setForm] = useState(EMPTY)
+  const [teamSets, setTeamSets] = useState([])
+  const [lineupId, setLineupId] = useState('')
   const [error, setError] = useState(null)
 
   function load() {
     api.get('/tournaments/').then(({ data }) => setItems(data.results || data))
+    api.get('/team-sets/').then(({ data }) => setTeamSets(data.results || data)).catch(() => {})
   }
   useEffect(load, [])
+
+  // Uložené soupisky odpovídající zvolené velikosti turnaje.
+  const matchingLineups = teamSets.filter((s) => s.team_size === Number(form.team_size))
 
   async function submit(e) {
     e.preventDefault()
     setError(null)
     try {
-      await api.post('/tournaments/', { ...form, team_size: Number(form.team_size) })
+      const { data: created } = await api.post('/tournaments/', {
+        ...form,
+        team_size: Number(form.team_size),
+      })
+      // Volitelně rovnou načti celou uloženou soupisku (všechny týmy naráz).
+      if (lineupId) {
+        await api.post(`/tournaments/${created.id}/apply_teamset/`, { team_set: Number(lineupId) })
+      }
       setForm(EMPTY)
-      load()
+      setLineupId('')
+      // Po založení rovnou do správy turnaje.
+      navigate(`/admin/tournaments/${created.id}`)
     } catch (err) {
       setError(err.response?.data ? JSON.stringify(err.response.data) : t('common.error'))
     }
@@ -56,12 +72,23 @@ export default function AdminTournaments() {
         />
         <label>
           <div className="muted" style={{ fontSize: '0.8rem' }}>{t('tournaments.format')}</div>
-          <select value={form.team_size} onChange={(e) => setForm({ ...form, team_size: e.target.value })}>
+          <select value={form.team_size} onChange={(e) => { setForm({ ...form, team_size: e.target.value }); setLineupId('') }}>
             {[1, 2, 3, 4, 5].map((n) => (
               <option key={n} value={n}>{n}v{n}</option>
             ))}
           </select>
         </label>
+        {matchingLineups.length > 0 && (
+          <label>
+            <div className="muted" style={{ fontSize: '0.8rem' }}>{t('admin.loadLineupOnCreate')}</div>
+            <select value={lineupId} onChange={(e) => setLineupId(e.target.value)}>
+              <option value="">{t('admin.lineupNone')}</option>
+              {matchingLineups.map((s) => (
+                <option key={s.id} value={s.id}>{s.name} ({s.team_count} {t('admin.teamsWord')})</option>
+              ))}
+            </select>
+          </label>
+        )}
         {/* Double elimination zatím není implementované — zůstává jen single. */}
         <input
           placeholder={t('tournaments.season') + ' (2026-S1)'}

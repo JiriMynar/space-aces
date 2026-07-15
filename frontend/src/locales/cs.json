@@ -12,7 +12,6 @@
     "changePassword": "Změna hesla",
     "adminTournaments": "Správa turnajů",
     "adminPlayers": "Správa hráčů",
-    "adminSavedTeams": "Uložené týmy",
     "adminNews": "Správa novinek"
   },
   "common": {
@@ -175,23 +174,17 @@
     "newNews": "Nová novinka",
     "newsHeadline": "Nadpis",
     "newsBody": "Text (volitelné)",
-    "savedTeamsTitle": "Uložené týmy",
-    "savedTeamsHint": "Ulož sestavu týmu jednou a použij ji v libovolném turnaji jedním klikem.",
-    "newSavedTeam": "Nový uložený tým",
-    "editSavedTeam": "Upravit uložený tým",
-    "savedTeamName": "Název týmu",
-    "selectPlayers": "Vyber hráče",
-    "players": "Hráči",
-    "needNameAndPlayers": "Zadej název a vyber aspoň jednoho hráče.",
-    "addFromSaved": "Přidat z uloženého týmu",
-    "saveTeamTemplate": "Uložit tým pro příště",
-    "teamSaved": "Tým uložen pro příští použití.",
     "compositionTitle": "Celé složení (všechny týmy)",
-    "shuffleTeams": "Zamíchat týmy",
     "saveComposition": "Uložit složení",
     "loadComposition": "Načíst uložené složení",
     "compositionNamePrompt": "Pojmenuj složení (např. Liga jaro 2026):",
     "compositionSaved": "Složení uloženo — použij ho v libovolném turnaji.",
-    "teamsWord": "týmů"
+    "teamsWord": "týmů",
+    "shuffleSeeds": "Zamíchat pořadí týmů",
+    "shuffleSeedsHint": "Náhodně přehodí nasazení — změní, kdo hraje s kým v pavouku.",
+    "shufflePlayers": "Zamíchat hráče",
+    "shufflePlayersHint": "Náhodně přerozdělí hráče mezi týmy.",
+    "loadLineupOnCreate": "Načíst uloženou soupisku (volitelné)",
+    "lineupNone": "— žádná (prázdný turnaj) —"
   }
 }

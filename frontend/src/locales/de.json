@@ -12,7 +12,6 @@
     "changePassword": "Passwort ändern",
     "adminTournaments": "Turniere verwalten",
     "adminPlayers": "Spieler verwalten",
-    "adminSavedTeams": "Gespeicherte Teams",
     "adminNews": "News verwalten"
   },
   "common": {
@@ -175,23 +174,17 @@
     "newNews": "Neue News",
     "newsHeadline": "Überschrift",
     "newsBody": "Text (optional)",
-    "savedTeamsTitle": "Gespeicherte Teams",
-    "savedTeamsHint": "Speichere eine Team-Aufstellung einmal und nutze sie in jedem Turnier mit einem Klick.",
-    "newSavedTeam": "Neues gespeichertes Team",
-    "editSavedTeam": "Gespeichertes Team bearbeiten",
-    "savedTeamName": "Teamname",
-    "selectPlayers": "Spieler auswählen",
-    "players": "Spieler",
-    "needNameAndPlayers": "Namen eingeben und mindestens einen Spieler wählen.",
-    "addFromSaved": "Aus gespeichertem Team",
-    "saveTeamTemplate": "Team zur Wiederverwendung speichern",
-    "teamSaved": "Team für die spätere Nutzung gespeichert.",
     "compositionTitle": "Gesamte Aufstellung (alle Teams)",
-    "shuffleTeams": "Teams mischen",
     "saveComposition": "Aufstellung speichern",
     "loadComposition": "Gespeicherte Aufstellung laden",
     "compositionNamePrompt": "Aufstellung benennen (z. B. Frühlingsliga 2026):",
     "compositionSaved": "Aufstellung gespeichert — in jedem Turnier wiederverwendbar.",
-    "teamsWord": "Teams"
+    "teamsWord": "Teams",
+    "shuffleSeeds": "Team-Reihenfolge mischen",
+    "shuffleSeedsHint": "Setzung zufällig neu — ändert, wer gegen wen spielt.",
+    "shufflePlayers": "Spieler mischen",
+    "shufflePlayersHint": "Spieler zufällig auf die Teams verteilen.",
+    "loadLineupOnCreate": "Gespeicherte Aufstellung laden (optional)",
+    "lineupNone": "— keine (leeres Turnier) —"
   }
 }

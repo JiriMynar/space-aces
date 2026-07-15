@@ -154,7 +154,7 @@ function EditTournamentForm({ tournament, onSaved }) {
   )
 }
 
-function SortableTeamRow({ team, onRename, onDelete, onSave }) {
+function SortableTeamRow({ team, onRename, onDelete }) {
   const { t } = useTranslation()
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: team.id })
   const style = {
@@ -175,7 +175,6 @@ function SortableTeamRow({ team, onRename, onDelete, onSave }) {
         style={{ flex: 1, padding: '0.3em 0.5em' }}
       />
       <span className="muted" style={{ fontSize: '0.8rem' }}>{team.members.map((m) => m.nick).join(', ')}</span>
-      <button type="button" onClick={() => onSave(team)} title={t('admin.saveTeamTemplate')}>💾</button>
       <button type="button" onClick={() => onDelete(team.id)} title={t('admin.delete')}>✕</button>
     </div>
   )
@@ -189,14 +188,10 @@ function TeamsSection({ tournament, players, onChange }) {
   const [seeding, setSeeding] = useState('random')
   const [error, setError] = useState(null)
   const [teams, setTeams] = useState(tournament.teams)
-  const [savedTeams, setSavedTeams] = useState([])
   const [teamSets, setTeamSets] = useState([])
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
 
   useEffect(() => { setTeams(tournament.teams) }, [tournament.teams])
-  useEffect(() => {
-    api.get('/saved-teams/').then(({ data }) => setSavedTeams(data.results || data)).catch(() => {})
-  }, [])
 
   const reloadTeamSets = useCallback(() => {
     api.get(`/team-sets/?team_size=${size}`).then(({ data }) => setTeamSets(data.results || data)).catch(() => {})
@@ -204,10 +199,20 @@ function TeamsSection({ tournament, players, onChange }) {
   useEffect(() => { reloadTeamSets() }, [reloadTeamSets])
 
   // --- Celé složení turnaje (všechny týmy najednou) + zamíchání ---
-  async function shuffleTeams() {
+  async function shuffleSeeds() {
     setError(null)
     try {
-      await api.post(`/tournaments/${tournament.id}/shuffle_teams/`, {})
+      await api.post(`/tournaments/${tournament.id}/shuffle_seeds/`, {})
+      onChange()
+    } catch (err) {
+      setError(err.response?.data?.detail || t('common.error'))
+    }
+  }
+
+  async function shufflePlayers() {
+    setError(null)
+    try {
+      await api.post(`/tournaments/${tournament.id}/shuffle_players/`, {})
       onChange()
     } catch (err) {
       setError(err.response?.data?.detail || t('common.error'))
@@ -241,38 +246,6 @@ function TeamsSection({ tournament, players, onChange }) {
     if (!window.confirm(t('admin.confirmDelete'))) return
     await api.delete(`/team-sets/${setId}/`)
     reloadTeamSets()
-  }
-
-  // Uložené sestavy odpovídající velikosti tohoto turnaje.
-  const matchingSaved = savedTeams.filter((s) => s.size === size)
-
-  async function cloneSaved(savedId) {
-    const saved = savedTeams.find((s) => s.id === Number(savedId))
-    if (!saved) return
-    try {
-      await api.post('/teams/', {
-        tournament: tournament.id,
-        name: saved.name,
-        member_ids: saved.members.map((m) => m.id),
-      })
-      onChange()
-    } catch (err) {
-      setError(err.response?.data ? JSON.stringify(err.response.data) : t('common.error'))
-    }
-  }
-
-  async function saveAsTemplate(team) {
-    try {
-      await api.post('/saved-teams/', {
-        name: team.name,
-        member_ids: team.members.map((m) => m.id),
-      })
-      const { data } = await api.get('/saved-teams/')
-      setSavedTeams(data.results || data)
-      alert(t('admin.teamSaved'))
-    } catch (err) {
-      alert(err.response?.data ? JSON.stringify(err.response.data) : t('common.error'))
-    }
   }
 
   async function addTeam(e) {
@@ -351,7 +324,7 @@ function TeamsSection({ tournament, players, onChange }) {
         <SortableContext items={teams.map((tm) => tm.id)} strategy={verticalListSortingStrategy}>
           <div className="seed-list">
             {teams.map((tm) => (
-              <SortableTeamRow key={tm.id} team={tm} onRename={renameTeam} onDelete={deleteTeam} onSave={saveAsTemplate} />
+              <SortableTeamRow key={tm.id} team={tm} onRename={renameTeam} onDelete={deleteTeam} />
             ))}
           </div>
         </SortableContext>
@@ -360,7 +333,8 @@ function TeamsSection({ tournament, players, onChange }) {
       <div className="grid" style={{ gap: '0.5rem', padding: '0.7rem', border: '1px solid var(--border)', borderRadius: '8px' }}>
         <strong>{t('admin.compositionTitle')}</strong>
         <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <button type="button" onClick={shuffleTeams} disabled={teams.length < 1}>🔀 {t('admin.shuffleTeams')}</button>
+          <button type="button" onClick={shuffleSeeds} disabled={teams.length < 2} title={t('admin.shuffleSeedsHint')}>🔀 {t('admin.shuffleSeeds')}</button>
+          <button type="button" onClick={shufflePlayers} disabled={teams.length < 1} title={t('admin.shufflePlayersHint')}>🔀 {t('admin.shufflePlayers')}</button>
           <button type="button" onClick={saveComposition} disabled={teams.length < 1}>💾 {t('admin.saveComposition')}</button>
           {teamSets.length > 0 && (
             <label>
@@ -392,17 +366,6 @@ function TeamsSection({ tournament, players, onChange }) {
             <button type="button" onClick={autoFill}>⚡ {t('admin.autoFillTeams')}</button>
             <span className="muted" style={{ marginLeft: '0.6rem', fontSize: '0.85rem' }}>{t('admin.autoFillHint', { size })}</span>
           </div>
-        )}
-        {matchingSaved.length > 0 && (
-          <label>
-            <span className="muted" style={{ fontSize: '0.85rem', marginRight: '0.4rem' }}>{t('admin.addFromSaved')}:</span>
-            <select value="" onChange={(e) => { if (e.target.value) cloneSaved(e.target.value); e.target.value = '' }}>
-              <option value="">—</option>
-              {matchingSaved.map((s) => (
-                <option key={s.id} value={s.id}>{s.name} ({s.members.map((m) => m.nick).join(', ')})</option>
-              ))}
-            </select>
-          </label>
         )}
       </div>
 
