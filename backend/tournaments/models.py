@@ -72,10 +72,8 @@ class Tournament(models.Model):
     description = models.TextField(blank=True)
     # Datum konání turnaje (kdy se hraje / hrálo).
     event_date = models.DateField(null=True, blank=True)
-    # Prize pool v EUR (volitelné — o kolik se hraje).
-    prize_pool = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
-    )
+    # Prize pool v celých EUR (volitelné — o kolik se hraje).
+    prize_pool = models.PositiveIntegerField(null=True, blank=True)
     # Odkaz na živý přenos (YouTube). Zobrazí se na home u aktivního turnaje.
     stream_url = models.URLField(blank=True)
 
