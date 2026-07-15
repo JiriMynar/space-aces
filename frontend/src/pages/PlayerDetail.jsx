@@ -31,6 +31,7 @@ export default function PlayerDetail() {
   if (!player) return <p className="muted">{t('common.error')}</p>
 
   const s = player.stats
+  const act = player.activity
   return (
     <div className="grid" style={{ gap: '1.5rem' }}>
       <div>
@@ -53,6 +54,18 @@ export default function PlayerDetail() {
           <StatTile label={t('playerDetail.matches')} value={s.matches} />
         </div>
       </section>
+
+      {act && (
+        <section>
+          <h3>{t('activity.title')}</h3>
+          <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))' }}>
+            <StatTile label={t('activity.rate')} value={`${Math.round(act.activity_rate * 100)}%`} />
+            <StatTile label={t('activity.eventsCol')} value={`${act.events_attended} / ${act.events_total}`} />
+            <StatTile label={t('activity.tournamentsCol')} value={`${act.tournaments_played} / ${act.tournaments_total}`} />
+          </div>
+          <p className="muted" style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>{t('activity.hint')}</p>
+        </section>
+      )}
     </div>
   )
 }

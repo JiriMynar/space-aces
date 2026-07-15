@@ -28,12 +28,14 @@ export default function Layout() {
         <NavLink to="/archive">{t('nav.archive')}</NavLink>
         <NavLink to="/leaderboards">{t('nav.leaderboards')}</NavLink>
         <NavLink to="/players">{t('nav.players')}</NavLink>
+        <NavLink to="/activity">{t('nav.activity')}</NavLink>
         <span className="spacer" />
         <LanguageSwitcher />
         {isAdmin ? (
           <>
             <NavLink to="/admin/tournaments">⚙ {t('nav.adminTournaments')}</NavLink>
             <NavLink to="/admin/players">⚙ {t('nav.adminPlayers')}</NavLink>
+            <NavLink to="/admin/events">⚙ {t('nav.adminEvents')}</NavLink>
             <NavLink to="/admin/news">⚙ {t('nav.adminNews')}</NavLink>
             <NavLink to="/change-password">{t('nav.changePassword')}</NavLink>
             <button onClick={handleLogout}>{t('nav.logout')}</button>
