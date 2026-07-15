@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import api from '../api/client'
 import Bracket from '../components/Bracket'
+import LeagueView from '../components/LeagueView'
 import { statusBadgeClass } from '../lib/labels'
 
 export default function TournamentDetail() {
@@ -31,15 +32,19 @@ export default function TournamentDetail() {
           <span className={statusBadgeClass(tournament.status)}>{t(`status.${tournament.status}`)}</span>
         </div>
         <p className="muted">
-          {tournament.format_label} · {t(`bracketType.${tournament.bracket_type}`)}
+          {tournament.format_label} · {t(`mode.${tournament.mode}`)}
           {tournament.season ? ` · ${tournament.season}` : ''}
         </p>
       </div>
 
-      <section>
-        <h3>{t('detail.bracket')}</h3>
-        <Bracket rounds={tournament.rounds} />
-      </section>
+      {tournament.mode === 'league' ? (
+        <LeagueView tournament={tournament} />
+      ) : (
+        <section>
+          <h3>{t('detail.bracket')}</h3>
+          <Bracket rounds={tournament.rounds} />
+        </section>
+      )}
 
       <section className="panel">
         <h3>{t('detail.participants')} ({tournament.teams.length})</h3>
@@ -48,7 +53,7 @@ export default function TournamentDetail() {
             .slice()
             .sort((a, b) => (a.seed || 99) - (b.seed || 99))
             .map((team) => (
-              <div key={team.id} style={{ fontSize: '0.9rem' }}>
+              <div key={team.id} style={{ fontSize: '0.9rem' }} title={(team.members || []).map((m) => m.nick).join(', ')}>
                 <span className="muted">#{team.seed || '—'} </span>
                 {team.name}
               </div>

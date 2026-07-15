@@ -7,10 +7,15 @@ import { statusBadgeClass } from '../../lib/labels'
 const EMPTY = {
   name: '',
   team_size: 1,
+  mode: 'elimination',
   bracket_type: 'single',
   seeding_method: 'random',
   season: '',
   description: '',
+  points_per_win: '1',
+  points_per_draw: '0',
+  points_per_loss: '0',
+  points_per_kill: '0.5',
 }
 
 export default function AdminTournaments() {
@@ -78,6 +83,31 @@ export default function AdminTournaments() {
             ))}
           </select>
         </label>
+        <label>
+          <div className="muted" style={{ fontSize: '0.8rem' }}>{t('admin.mode')}</div>
+          <select value={form.mode} onChange={(e) => setForm({ ...form, mode: e.target.value })}>
+            <option value="elimination">{t('mode.elimination')}</option>
+            <option value="league">{t('mode.league')}</option>
+          </select>
+        </label>
+        {form.mode === 'league' && (
+          <div className="grid" style={{ gap: '0.5rem', padding: '0.7rem', border: '1px solid var(--border)', borderRadius: '8px' }}>
+            <strong style={{ fontSize: '0.9rem' }}>{t('admin.scoringTitle')}</strong>
+            {[
+              ['points_per_win', t('admin.pointsPerWin')],
+              ['points_per_draw', t('admin.pointsPerDraw')],
+              ['points_per_loss', t('admin.pointsPerLoss')],
+              ['points_per_kill', t('admin.pointsPerKill')],
+            ].map(([key, label]) => (
+              <label key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.6rem' }}>
+                <span className="muted" style={{ fontSize: '0.85rem' }}>{label}</span>
+                <input type="number" step="0.5" min="0" value={form[key]}
+                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                  style={{ width: 90 }} />
+              </label>
+            ))}
+          </div>
+        )}
         {matchingLineups.length > 0 && (
           <label>
             <div className="muted" style={{ fontSize: '0.8rem' }}>{t('admin.loadLineupOnCreate')}</div>

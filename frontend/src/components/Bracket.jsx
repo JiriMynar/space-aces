@@ -10,11 +10,16 @@ function TeamRow({ team, score, isWinner, isLoser }) {
       </div>
     )
   }
+  const roster = (team.members || []).map((m) => m.nick).join(', ')
   return (
-    <div className={`bt-team${isWinner ? ' bt-win' : ''}${isLoser ? ' bt-lose' : ''}`}>
+    <div
+      className={`bt-team${isWinner ? ' bt-win' : ''}${isLoser ? ' bt-lose' : ''}`}
+      title={roster || undefined}
+    >
       <span className="bt-name">
         {team.seed ? <span className="bt-seed">{team.seed}</span> : null}
         {team.name}
+        {roster ? <span className="bt-roster"> ⓘ</span> : null}
       </span>
       <span className="bt-score">{score}</span>
     </div>
