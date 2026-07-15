@@ -398,6 +398,66 @@ class HallOfFameView(APIView):
         return Response(hall_of_fame())
 
 
+class LastResultView(APIView):
+    """Souhrn posledního dokončeného turnaje pro domovskou stránku."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        tournament = (
+            Tournament.objects.filter(status=Tournament.Status.COMPLETED)
+            .prefetch_related("rounds__matches", "teams__members")
+            .order_by("-completed_at", "-created_at")
+            .first()
+        )
+        if not tournament:
+            return Response(None)
+
+        data = {
+            "id": tournament.id,
+            "name": tournament.name,
+            "mode": tournament.mode,
+            "format_label": tournament.format_label,
+            "event_date": tournament.event_date,
+            "prize_pool": tournament.prize_pool,
+            "winner": None,
+        }
+        if tournament.mode == Tournament.Mode.LEAGUE:
+            table = league_table(tournament)
+            if table:
+                data["winner"] = {"name": table[0]["name"]}
+            data["standings"] = table[:3]
+        else:
+            champion, runner_up = self._elimination_result(tournament)
+            if champion:
+                data["winner"] = {
+                    "name": champion.name,
+                    "members": [m.nick for m in champion.members.all()],
+                }
+            if runner_up:
+                data["runner_up"] = {"name": runner_up.name}
+        return Response(data)
+
+    @staticmethod
+    def _elimination_result(tournament):
+        winners_rounds = sorted(
+            (r for r in tournament.rounds.all() if r.bracket_side == "winners"),
+            key=lambda r: r.index,
+        )
+        if not winners_rounds:
+            return None, None
+        finals = list(winners_rounds[-1].matches.all())
+        final = finals[0] if finals else None
+        if not final or not final.winner_id or final.status != "completed":
+            return None, None
+        teams = {tm.id: tm for tm in tournament.teams.all()}
+        champion = teams.get(final.winner_id)
+        runner_id = (
+            final.team_a_id if final.winner_id == final.team_b_id else final.team_b_id
+        )
+        return champion, teams.get(runner_id)
+
+
 class ChangePasswordView(APIView):
     """Změna hesla přihlášeného uživatele. Vyžaduje současné + nové heslo."""
 
