@@ -122,6 +122,9 @@ function EditTournamentForm({ tournament, onSaved }) {
     name: tournament.name,
     season: tournament.season || '',
     description: tournament.description || '',
+    event_date: tournament.event_date || '',
+    prize_pool: tournament.prize_pool ?? '',
+    stream_url: tournament.stream_url || '',
   })
   const [error, setError] = useState(null)
 
@@ -129,7 +132,11 @@ function EditTournamentForm({ tournament, onSaved }) {
     e.preventDefault()
     setError(null)
     try {
-      await api.patch(`/tournaments/${tournament.id}/`, form)
+      await api.patch(`/tournaments/${tournament.id}/`, {
+        ...form,
+        event_date: form.event_date || null,
+        prize_pool: form.prize_pool === '' ? null : form.prize_pool,
+      })
       setOpen(false)
       onSaved()
     } catch (err) {
@@ -149,6 +156,15 @@ function EditTournamentForm({ tournament, onSaved }) {
       <h3 style={{ margin: 0 }}>{t('admin.editTournament')}</h3>
       <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder={t('admin.tournamentName')} required />
       <input value={form.season} onChange={(e) => setForm({ ...form, season: e.target.value })} placeholder={t('tournaments.season')} />
+      <label>
+        <div className="muted" style={{ fontSize: '0.8rem' }}>{t('admin.eventDate')}</div>
+        <input type="date" value={form.event_date} onChange={(e) => setForm({ ...form, event_date: e.target.value })} />
+      </label>
+      <label>
+        <div className="muted" style={{ fontSize: '0.8rem' }}>{t('admin.prizePool')}</div>
+        <input type="number" min="0" step="1" placeholder="0" value={form.prize_pool} onChange={(e) => setForm({ ...form, prize_pool: e.target.value })} />
+      </label>
+      <input type="url" value={form.stream_url} onChange={(e) => setForm({ ...form, stream_url: e.target.value })} placeholder={t('admin.streamUrl')} />
       <textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder={t('admin.description')} style={{ resize: 'vertical' }} />
       {error && <p style={{ color: 'var(--lose)' }}>{error}</p>}
       <div style={{ display: 'flex', gap: '0.5rem' }}>

@@ -34,7 +34,10 @@
     "noChampions": "No champions yet — finish your first tournament.",
     "featured": "Featured tournament",
     "noTournament": "No active tournament right now.",
-    "viewAll": "View all tournaments"
+    "viewAll": "View all tournaments",
+    "lastResult": "Last tournament",
+    "winner": "winner",
+    "watchLive": "Watch live"
   },
   "status": {
     "draft": "Preparation",
@@ -214,6 +217,9 @@
     "pointsPerWin": "Points per win",
     "pointsPerDraw": "Points per draw",
     "pointsPerLoss": "Points per loss",
-    "pointsPerKill": "Points per kill"
+    "pointsPerKill": "Points per kill",
+    "eventDate": "Event date",
+    "prizePool": "Prize pool (€)",
+    "streamUrl": "Live stream URL (YouTube)"
   }
 }

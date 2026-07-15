@@ -34,7 +34,10 @@
     "noChampions": "Zatím žádní šampioni — dokonči první turnaj.",
     "featured": "Vybraný turnaj",
     "noTournament": "Žádný aktivní turnaj právě neběží.",
-    "viewAll": "Zobrazit všechny turnaje"
+    "viewAll": "Zobrazit všechny turnaje",
+    "lastResult": "Poslední turnaj",
+    "winner": "vítěz",
+    "watchLive": "Sledovat živě"
   },
   "status": {
     "draft": "Příprava",
@@ -214,6 +217,9 @@
     "pointsPerWin": "Bodů za výhru",
     "pointsPerDraw": "Bodů za remízu",
     "pointsPerLoss": "Bodů za prohru",
-    "pointsPerKill": "Bodů za kill"
+    "pointsPerKill": "Bodů za kill",
+    "eventDate": "Datum konání",
+    "prizePool": "Prize pool (€)",
+    "streamUrl": "Odkaz na živý přenos (YouTube)"
   }
 }

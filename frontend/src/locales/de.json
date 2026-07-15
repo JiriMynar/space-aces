@@ -34,7 +34,10 @@
     "noChampions": "Noch keine Champions — beende dein erstes Turnier.",
     "featured": "Ausgewähltes Turnier",
     "noTournament": "Derzeit läuft kein aktives Turnier.",
-    "viewAll": "Alle Turniere anzeigen"
+    "viewAll": "Alle Turniere anzeigen",
+    "lastResult": "Letztes Turnier",
+    "winner": "Sieger",
+    "watchLive": "Live ansehen"
   },
   "status": {
     "draft": "Vorbereitung",
@@ -214,6 +217,9 @@
     "pointsPerWin": "Punkte pro Sieg",
     "pointsPerDraw": "Punkte pro Unentschieden",
     "pointsPerLoss": "Punkte pro Niederlage",
-    "pointsPerKill": "Punkte pro Kill"
+    "pointsPerKill": "Punkte pro Kill",
+    "eventDate": "Turnierdatum",
+    "prizePool": "Prize Pool (€)",
+    "streamUrl": "Livestream-URL (YouTube)"
   }
 }
