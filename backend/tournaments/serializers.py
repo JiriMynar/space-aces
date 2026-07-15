@@ -232,11 +232,12 @@ class AttendanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attendance
-        fields = ["id", "player", "nick", "avatar_url", "present"]
+        fields = ["id", "player", "nick", "avatar_url", "status"]
 
 
 class EventListSerializer(serializers.ModelSerializer):
     present_count = serializers.SerializerMethodField()
+    ignored_count = serializers.SerializerMethodField()
     marked_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -247,13 +248,21 @@ class EventListSerializer(serializers.ModelSerializer):
             "event_date",
             "description",
             "present_count",
+            "ignored_count",
             "marked_count",
             "created_at",
         ]
         read_only_fields = ["created_at"]
 
     def get_present_count(self, obj):
-        return sum(1 for a in obj.attendance.all() if a.present)
+        return sum(
+            1 for a in obj.attendance.all() if a.status == Attendance.Status.PRESENT
+        )
+
+    def get_ignored_count(self, obj):
+        return sum(
+            1 for a in obj.attendance.all() if a.status == Attendance.Status.IGNORED
+        )
 
     def get_marked_count(self, obj):
         return obj.attendance.count()
@@ -270,7 +279,7 @@ class AttendanceEntrySerializer(serializers.Serializer):
     """Jeden řádek hromadného zápisu docházky."""
 
     player = serializers.PrimaryKeyRelatedField(queryset=Player.objects.all())
-    present = serializers.BooleanField()
+    status = serializers.ChoiceField(choices=Attendance.Status.choices)
 
 
 class SetAttendanceSerializer(serializers.Serializer):
