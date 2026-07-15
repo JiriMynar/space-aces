@@ -27,7 +27,11 @@
     "events": "Akce",
     "attendance": "Docházka",
     "present": "Byl",
+    "presentHint": "Dorazil a zúčastnil se.",
+    "ignored": "Online, nepřidal se",
+    "ignoredHint": "Byl online, ale na akci se nepřidal. Do aktivity se nepočítá.",
     "absent": "Nebyl",
+    "absentHint": "Vůbec nebyl online.",
     "noEvents": "Zatím žádné akce.",
     "noPlayers": "Zatím žádní hráči.",
     "noAttendance": "U této akce zatím není vyplněná docházka."
