@@ -417,6 +417,136 @@ th {
   text-align: center;
 }
 
+/* --- Docházka a klanová aktivita --- */
+
+/* Ukazatel byl/nebyl */
+.att-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+.att-dot.on {
+  background: var(--win);
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+}
+.att-dot.off {
+  background: var(--lose);
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.45);
+}
+
+/* Měřič aktivity (pruh s procenty) */
+.activity-meter {
+  position: relative;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  min-width: 140px;
+}
+.activity-fill {
+  height: 100%;
+  border-radius: 999px 0 0 999px;
+  transition: width 0.25s;
+}
+.activity-fill.act-high {
+  background: linear-gradient(90deg, #1f9d6b, var(--win));
+}
+.activity-fill.act-mid {
+  background: linear-gradient(90deg, #b0761f, #f0b429);
+}
+.activity-fill.act-low {
+  background: linear-gradient(90deg, #a13a34, var(--lose));
+}
+.activity-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Seznam akcí (rozbalovací) */
+.event-row {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+.event-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  text-align: left;
+  flex-wrap: wrap;
+}
+.event-head:hover {
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.04);
+}
+.event-head .spacer {
+  flex: 1;
+}
+.event-caret {
+  color: var(--text-dim);
+  width: 0.8rem;
+}
+.event-body {
+  padding: 0.2rem 0.8rem 0.8rem 2rem;
+}
+
+/* Seznam docházky (veřejný pohled) */
+.att-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+}
+.att-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 160px;
+}
+
+/* Editor docházky (admin) */
+.att-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 460px;
+  overflow-y: auto;
+}
+.att-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+}
+.att-edit-row.is-present {
+  border-color: rgba(52, 211, 153, 0.5);
+}
+.att-edit-row.is-absent {
+  border-color: rgba(248, 113, 113, 0.35);
+}
+.att-edit-row button {
+  padding: 0.25em 0.7em;
+  font-size: 0.85rem;
+}
+
 /* Ruční nasazení (drag & drop) */
 .seed-list {
   display: flex;
