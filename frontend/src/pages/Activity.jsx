@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next'
 import api from '../api/client'
 import Avatar from '../components/Avatar'
 
+// Stav docházky -> třída barevné tečky.
+const DOT = { present: 'on', ignored: 'warn', absent: 'off' }
+
 // Barva ukazatele podle míry aktivity (zelená = aktivní, červená = neaktivní).
 function rateClass(rate) {
   if (rate >= 0.7) return 'act-high'
@@ -33,6 +36,7 @@ function EventRow({ event }) {
         <span className="spacer" />
         <span className="muted">
           🟢 {event.present_count} / {event.marked_count}
+          {event.ignored_count > 0 ? ` · 🟠 ${event.ignored_count}` : ''}
         </span>
       </button>
       {open && (
@@ -46,10 +50,10 @@ function EventRow({ event }) {
             <div className="att-list">
               {detail.attendance.map((a) => (
                 <div key={a.id} className="att-item">
-                  <span className={`att-dot ${a.present ? 'on' : 'off'}`} />
+                  <span className={`att-dot ${DOT[a.status]}`} />
                   <Link to={`/players/${a.player}`}>{a.nick}</Link>
-                  <span className="muted" style={{ fontSize: '0.8rem' }}>
-                    {a.present ? t('activity.present') : t('activity.absent')}
+                  <span className="muted" style={{ fontSize: '0.8rem' }} title={t(`activity.${a.status}Hint`)}>
+                    {t(`activity.${a.status}`)}
                   </span>
                 </div>
               ))}
@@ -105,7 +109,10 @@ export default function Activity() {
                       <Link to={`/players/${row.id}`}>{row.nick}</Link>
                     </span>
                   </td>
-                  <td className="muted">{row.events_attended} / {row.events_total}</td>
+                  <td className="muted">
+                    {row.events_attended} / {row.events_total}
+                    {row.events_ignored > 0 ? <span title={t('activity.ignoredHint')}> · 🟠 {row.events_ignored}</span> : ''}
+                  </td>
                   <td className="muted">{row.tournaments_played} / {row.tournaments_total}</td>
                   <td>
                     <div className="activity-meter" title={`${Math.round(row.activity_rate * 100)} %`}>

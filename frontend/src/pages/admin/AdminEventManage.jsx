@@ -4,12 +4,16 @@ import { useTranslation } from 'react-i18next'
 import api from '../../api/client'
 import Avatar from '../../components/Avatar'
 
+// Stav docházky -> třída barevné tečky.
+const DOT = { present: 'on', ignored: 'warn', absent: 'off' }
+const STATUSES = ['present', 'ignored', 'absent']
+
 export default function AdminEventManage() {
   const { id } = useParams()
   const { t } = useTranslation()
   const [event, setEvent] = useState(null)
   const [players, setPlayers] = useState([])
-  // Mapa player_id -> byl/nebyl. Zdroj pravdy pro editor, ukládá se hromadně.
+  // Mapa player_id -> stav docházky. Zdroj pravdy pro editor, ukládá se hromadně.
   const [marks, setMarks] = useState({})
   const [loading, setLoading] = useState(true)
   const [saved, setSaved] = useState(false)
@@ -23,7 +27,7 @@ export default function AdminEventManage() {
     setEvent(ev)
     setPlayers(pl.results || pl)
     const next = {}
-    ;(ev.attendance || []).forEach((a) => { next[a.player] = a.present })
+    ;(ev.attendance || []).forEach((a) => { next[a.player] = a.status })
     setMarks(next)
   }, [id])
 
@@ -32,22 +36,22 @@ export default function AdminEventManage() {
   if (loading) return <p className="muted">{t('common.loading')}</p>
   if (!event) return <p className="muted">{t('common.error')}</p>
 
-  function setMark(playerId, present) {
+  function setMark(playerId, status) {
     setSaved(false)
-    setMarks((m) => ({ ...m, [playerId]: present }))
+    setMarks((m) => ({ ...m, [playerId]: status }))
   }
 
-  function markAll(present) {
+  function markAll(status) {
     setSaved(false)
     const next = {}
-    players.forEach((p) => { next[p.id] = present })
+    players.forEach((p) => { next[p.id] = status })
     setMarks(next)
   }
 
   async function save() {
     setError(null)
     try {
-      const entries = players.map((p) => ({ player: p.id, present: !!marks[p.id] }))
+      const entries = players.map((p) => ({ player: p.id, status: marks[p.id] || 'absent' }))
       await api.post(`/events/${id}/set_attendance/`, { entries })
       await load()
       setSaved(true)
@@ -56,7 +60,8 @@ export default function AdminEventManage() {
     }
   }
 
-  const presentCount = players.filter((p) => marks[p.id]).length
+  const presentCount = players.filter((p) => marks[p.id] === 'present').length
+  const ignoredCount = players.filter((p) => marks[p.id] === 'ignored').length
 
   return (
     <div className="grid" style={{ gap: '1.5rem' }}>
@@ -71,10 +76,11 @@ export default function AdminEventManage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flexWrap: 'wrap' }}>
           <h3 style={{ margin: 0 }}>{t('activity.attendance')}</h3>
           <span className="muted">🟢 {presentCount} / {players.length}</span>
+          {ignoredCount > 0 && <span className="muted">🟠 {ignoredCount}</span>}
           <span className="spacer" style={{ flex: 1 }} />
           <span className="muted" style={{ fontSize: '0.85rem' }}>{t('admin.markAll')}:</span>
-          <button type="button" onClick={() => markAll(true)}>🟢 {t('activity.present')}</button>
-          <button type="button" onClick={() => markAll(false)}>🔴 {t('activity.absent')}</button>
+          <button type="button" onClick={() => markAll('present')}>🟢 {t('activity.present')}</button>
+          <button type="button" onClick={() => markAll('absent')}>🔴 {t('activity.absent')}</button>
         </div>
 
         {players.length === 0 ? (
@@ -82,26 +88,23 @@ export default function AdminEventManage() {
         ) : (
           <div className="att-editor">
             {players.map((p) => {
-              const present = !!marks[p.id]
+              const status = marks[p.id] || 'absent'
               return (
-                <div key={p.id} className={`att-edit-row ${present ? 'is-present' : 'is-absent'}`}>
-                  <span className={`att-dot ${present ? 'on' : 'off'}`} />
+                <div key={p.id} className={`att-edit-row is-${status}`}>
+                  <span className={`att-dot ${DOT[status]}`} />
                   <Avatar player={p} size={26} />
                   <span style={{ flex: 1 }}>{p.nick}</span>
-                  <button
-                    type="button"
-                    className={present ? 'primary' : ''}
-                    onClick={() => setMark(p.id, true)}
-                  >
-                    {t('activity.present')}
-                  </button>
-                  <button
-                    type="button"
-                    className={!present ? 'primary' : ''}
-                    onClick={() => setMark(p.id, false)}
-                  >
-                    {t('activity.absent')}
-                  </button>
+                  {STATUSES.map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      className={status === s ? 'primary' : ''}
+                      onClick={() => setMark(p.id, s)}
+                      title={t(`activity.${s}Hint`)}
+                    >
+                      {t(`activity.${s}`)}
+                    </button>
+                  ))}
                 </div>
               )
             })}
