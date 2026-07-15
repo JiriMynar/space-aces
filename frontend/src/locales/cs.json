@@ -6,13 +6,31 @@
     "archive": "Archiv",
     "leaderboards": "Žebříčky",
     "players": "Hráči",
+    "activity": "Aktivita",
     "login": "Přihlásit",
     "logout": "Odhlásit",
     "admin": "Admin",
     "changePassword": "Změna hesla",
     "adminTournaments": "Správa turnajů",
     "adminPlayers": "Správa hráčů",
+    "adminEvents": "Správa akcí",
     "adminNews": "Správa novinek"
+  },
+  "activity": {
+    "title": "Klanová aktivita",
+    "boardTitle": "Aktivita členů",
+    "member": "Člen",
+    "eventsCol": "Akce",
+    "tournamentsCol": "Turnaje",
+    "rate": "Aktivita",
+    "hint": "Aktivita = docházka na akcích + účast v turnajích, které proběhly. Turnaje v přípravě se nepočítají.",
+    "events": "Akce",
+    "attendance": "Docházka",
+    "present": "Byl",
+    "absent": "Nebyl",
+    "noEvents": "Zatím žádné akce.",
+    "noPlayers": "Zatím žádní hráči.",
+    "noAttendance": "U této akce zatím není vyplněná docházka."
   },
   "common": {
     "loading": "Načítání…",
@@ -220,6 +238,14 @@
     "pointsPerKill": "Bodů za kill",
     "eventDate": "Datum konání",
     "prizePool": "Prize pool (€)",
-    "streamUrl": "Odkaz na živý přenos (YouTube)"
+    "streamUrl": "Odkaz na živý přenos (YouTube)",
+    "eventsTitle": "Správa akcí",
+    "newEvent": "Nová akce",
+    "eventName": "Název akce",
+    "createEvent": "Založit akci",
+    "markAll": "Označit všem",
+    "saveAttendance": "Uložit docházku",
+    "attendanceSaved": "Docházka uložena.",
+    "noPlayersYet": "Nejdřív přidej hráče ve Správě hráčů."
   }
 }
