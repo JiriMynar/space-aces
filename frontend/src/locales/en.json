@@ -27,7 +27,11 @@
     "events": "Events",
     "attendance": "Attendance",
     "present": "Present",
+    "presentHint": "Showed up and took part.",
+    "ignored": "Online, no-show",
+    "ignoredHint": "Was online but didn't join the event. Doesn't count towards activity.",
     "absent": "Absent",
+    "absentHint": "Wasn't online at all.",
     "noEvents": "No events yet.",
     "noPlayers": "No players yet.",
     "noAttendance": "Attendance has not been filled in for this event yet."

@@ -27,7 +27,11 @@
     "events": "Events",
     "attendance": "Anwesenheit",
     "present": "Anwesend",
+    "presentHint": "War da und hat teilgenommen.",
+    "ignored": "Online, nicht erschienen",
+    "ignoredHint": "War online, ist aber nicht zum Event gekommen. Zählt nicht zur Aktivität.",
     "absent": "Abwesend",
+    "absentHint": "War gar nicht online.",
     "noEvents": "Noch keine Events.",
     "noPlayers": "Noch keine Spieler.",
     "noAttendance": "Für dieses Event wurde die Anwesenheit noch nicht erfasst."
