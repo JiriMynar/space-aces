@@ -54,6 +54,28 @@
     "single": "Single elimination",
     "double": "Double elimination"
   },
+  "mode": {
+    "elimination": "Elimination (bracket)",
+    "league": "League (points table)"
+  },
+  "league": {
+    "standings": "Standings",
+    "team": "Team",
+    "played": "P",
+    "playedFull": "Played",
+    "w": "W",
+    "winsFull": "Wins",
+    "d": "D",
+    "drawsFull": "Draws",
+    "l": "L",
+    "lossesFull": "Losses",
+    "kills": "Kills",
+    "points": "Pts",
+    "pointsFull": "Points",
+    "fixtures": "Fixtures",
+    "matchday": "Round {{n}}",
+    "empty": "No results yet."
+  },
   "bracket": {
     "champion": "Champion"
   },
@@ -185,6 +207,13 @@
     "shufflePlayers": "Shuffle players",
     "shufflePlayersHint": "Randomly redistribute players across the teams.",
     "loadLineupOnCreate": "Load a saved line-up (optional)",
-    "lineupNone": "— none (empty tournament) —"
+    "lineupNone": "— none (empty tournament) —",
+    "mode": "Tournament type",
+    "generateSchedule": "Generate schedule",
+    "scoringTitle": "Scoring (points)",
+    "pointsPerWin": "Points per win",
+    "pointsPerDraw": "Points per draw",
+    "pointsPerLoss": "Points per loss",
+    "pointsPerKill": "Points per kill"
   }
 }

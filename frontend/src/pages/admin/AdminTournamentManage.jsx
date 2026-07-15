@@ -17,6 +17,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import api from '../../api/client'
 import Bracket from '../../components/Bracket'
+import LeagueView from '../../components/LeagueView'
 import { statusBadgeClass } from '../../lib/labels'
 
 export default function AdminTournamentManage() {
@@ -64,7 +65,7 @@ export default function AdminTournamentManage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
           <h1 style={{ margin: 0 }}>{tournament.name}</h1>
           <span className={statusBadgeClass(tournament.status)}>{t(`status.${tournament.status}`)}</span>
-          <span className="muted">{tournament.format_label} · {t(`bracketType.${tournament.bracket_type}`)}</span>
+          <span className="muted">{tournament.format_label} · {t(`mode.${tournament.mode}`)}</span>
         </div>
         <div style={{ marginTop: '0.7rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           {isDraft && (
@@ -93,16 +94,20 @@ export default function AdminTournamentManage() {
         <TeamsSection tournament={tournament} players={players} onChange={load} />
       )}
 
-      <section>
-        <h3>{t('detail.bracket')}</h3>
-        <Bracket rounds={tournament.rounds} />
-      </section>
+      {tournament.mode === 'league' ? (
+        <LeagueView tournament={tournament} />
+      ) : (
+        <section>
+          <h3>{t('detail.bracket')}</h3>
+          <Bracket rounds={tournament.rounds} />
+        </section>
+      )}
 
       {isLive && matches.length > 0 && (
         <section className="grid" style={{ gap: '1rem' }}>
           <h3>{t('admin.enterResults')}</h3>
           {matches.map((m) => (
-            <MatchResultForm key={m.id} match={m} onSaved={load} />
+            <MatchResultForm key={m.id} match={m} onSaved={load} allowDraw={tournament.mode === 'league'} />
           ))}
         </section>
       )}
@@ -395,7 +400,7 @@ function TeamsSection({ tournament, players, onChange }) {
             <option value="manual">{t('admin.seedingManual')}</option>
           </select>
         </label>
-        <button onClick={generate} disabled={teams.length < 2}>{t('admin.generateBracket')}</button>
+        <button onClick={generate} disabled={teams.length < 2}>{tournament.mode === 'league' ? t('admin.generateSchedule') : t('admin.generateBracket')}</button>
         {teams.length < 2 && (
           <span className="muted" style={{ fontSize: '0.85rem' }}>{t('admin.needTwoTeams')}</span>
         )}
@@ -404,7 +409,7 @@ function TeamsSection({ tournament, players, onChange }) {
   )
 }
 
-function MatchResultForm({ match, onSaved }) {
+function MatchResultForm({ match, onSaved, allowDraw = false }) {
   const { t } = useTranslation()
   const membersA = match.team_a_detail?.members || []
   const membersB = match.team_b_detail?.members || []
@@ -427,7 +432,7 @@ function MatchResultForm({ match, onSaved }) {
     e.preventDefault()
     setError(null)
     if (scoreA === '' || scoreB === '') { setError(t('admin.enterScore')); return }
-    if (Number(scoreA) === Number(scoreB)) { setError(t('admin.noTie')); return }
+    if (!allowDraw && Number(scoreA) === Number(scoreB)) { setError(t('admin.noTie')); return }
     const statsArr = [...membersA, ...membersB].map((p) => ({
       player: p.id,
       kills: Number(stats[p.id]?.kills || 0),

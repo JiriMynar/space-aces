@@ -54,6 +54,28 @@
     "single": "Single Elimination",
     "double": "Double Elimination"
   },
+  "mode": {
+    "elimination": "K.-o.-System (Baum)",
+    "league": "Punkteliga (Tabelle)"
+  },
+  "league": {
+    "standings": "Tabelle",
+    "team": "Team",
+    "played": "Sp",
+    "playedFull": "Gespielt",
+    "w": "S",
+    "winsFull": "Siege",
+    "d": "U",
+    "drawsFull": "Unentschieden",
+    "l": "N",
+    "lossesFull": "Niederlagen",
+    "kills": "Kills",
+    "points": "Pkt",
+    "pointsFull": "Punkte",
+    "fixtures": "Spielplan",
+    "matchday": "Runde {{n}}",
+    "empty": "Noch keine Ergebnisse."
+  },
   "bracket": {
     "champion": "Champion"
   },
@@ -185,6 +207,13 @@
     "shufflePlayers": "Spieler mischen",
     "shufflePlayersHint": "Spieler zufällig auf die Teams verteilen.",
     "loadLineupOnCreate": "Gespeicherte Aufstellung laden (optional)",
-    "lineupNone": "— keine (leeres Turnier) —"
+    "lineupNone": "— keine (leeres Turnier) —",
+    "mode": "Turniertyp",
+    "generateSchedule": "Spielplan erstellen",
+    "scoringTitle": "Punktevergabe",
+    "pointsPerWin": "Punkte pro Sieg",
+    "pointsPerDraw": "Punkte pro Unentschieden",
+    "pointsPerLoss": "Punkte pro Niederlage",
+    "pointsPerKill": "Punkte pro Kill"
   }
 }

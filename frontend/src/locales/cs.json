@@ -54,6 +54,28 @@
     "single": "Single elimination",
     "double": "Double elimination"
   },
+  "mode": {
+    "elimination": "Vyřazovací (pavouk)",
+    "league": "Bodovací (tabulka)"
+  },
+  "league": {
+    "standings": "Tabulka",
+    "team": "Tým",
+    "played": "Z",
+    "playedFull": "Odehráno",
+    "w": "V",
+    "winsFull": "Výhry",
+    "d": "R",
+    "drawsFull": "Remízy",
+    "l": "P",
+    "lossesFull": "Prohry",
+    "kills": "Killů",
+    "points": "B",
+    "pointsFull": "Body",
+    "fixtures": "Rozlosování",
+    "matchday": "Kolo {{n}}",
+    "empty": "Zatím žádné výsledky."
+  },
   "bracket": {
     "champion": "Šampion"
   },
@@ -185,6 +207,13 @@
     "shufflePlayers": "Zamíchat hráče",
     "shufflePlayersHint": "Náhodně přerozdělí hráče mezi týmy.",
     "loadLineupOnCreate": "Načíst uloženou soupisku (volitelné)",
-    "lineupNone": "— žádná (prázdný turnaj) —"
+    "lineupNone": "— žádná (prázdný turnaj) —",
+    "mode": "Typ turnaje",
+    "generateSchedule": "Vygenerovat rozlosování",
+    "scoringTitle": "Bodování",
+    "pointsPerWin": "Bodů za výhru",
+    "pointsPerDraw": "Bodů za remízu",
+    "pointsPerLoss": "Bodů za prohru",
+    "pointsPerKill": "Bodů za kill"
   }
 }
