@@ -269,7 +269,16 @@ class Event(models.Model):
 
 
 class Attendance(models.Model):
-    """Docházka jednoho hráče na jedné akci. Binární: byl / nebyl."""
+    """Docházka jednoho hráče na jedné akci.
+
+    ``IGNORED`` = byl online, ale na akci se nepřidal — schválně oddělené od
+    ``ABSENT`` (vůbec nebyl), protože to o aktivitě vypovídá jinak.
+    """
+
+    class Status(models.TextChoices):
+        PRESENT = "present", "Byl"
+        IGNORED = "ignored", "Byl online, ale nepřidal se"
+        ABSENT = "absent", "Nebyl"
 
     event = models.ForeignKey(
         Event, on_delete=models.CASCADE, related_name="attendance"
@@ -277,15 +286,16 @@ class Attendance(models.Model):
     player = models.ForeignKey(
         Player, on_delete=models.CASCADE, related_name="attendance"
     )
-    present = models.BooleanField(default=False)
+    status = models.CharField(
+        max_length=8, choices=Status.choices, default=Status.ABSENT
+    )
 
     class Meta:
         unique_together = ("event", "player")
         ordering = ["player__nick"]
 
     def __str__(self):
-        mark = "byl" if self.present else "nebyl"
-        return f"{self.player.nick} — {self.event.name}: {mark}"
+        return f"{self.player.nick} — {self.event.name}: {self.get_status_display()}"
 
 
 class TeamSet(models.Model):
