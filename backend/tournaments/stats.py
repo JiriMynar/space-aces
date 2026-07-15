@@ -73,11 +73,12 @@ def _activity_totals():
     return total_events, total_tournaments
 
 
-def _activity_shape(attended, played, total_events, total_tournaments):
+def _activity_shape(attended, played, total_events, total_tournaments, ignored=0):
     opportunities = total_events + total_tournaments
     done = attended + played
     return {
         "events_attended": attended,
+        "events_ignored": ignored,
         "events_total": total_events,
         "tournaments_played": played,
         "tournaments_total": total_tournaments,
@@ -88,14 +89,22 @@ def _activity_shape(attended, played, total_events, total_tournaments):
 def player_activity(player):
     """Kombinovaná aktivita hráče: docházka na akcích + účast v turnajích."""
     total_events, total_tournaments = _activity_totals()
-    attended = Attendance.objects.filter(player=player, present=True).count()
+    # Aktivní = reálně dorazil. "Byl online, ale nepřidal se" se nepočítá.
+    attended = Attendance.objects.filter(
+        player=player, status=Attendance.Status.PRESENT
+    ).count()
+    ignored = Attendance.objects.filter(
+        player=player, status=Attendance.Status.IGNORED
+    ).count()
     played = (
         Tournament.objects.exclude(status=Tournament.Status.DRAFT)
         .filter(teams__members=player)
         .distinct()
         .count()
     )
-    return _activity_shape(attended, played, total_events, total_tournaments)
+    return _activity_shape(
+        attended, played, total_events, total_tournaments, ignored
+    )
 
 
 def activity_board():
@@ -103,7 +112,14 @@ def activity_board():
     total_events, total_tournaments = _activity_totals()
     players = Player.objects.annotate(
         attended=Count(
-            "attendance", filter=Q(attendance__present=True), distinct=True
+            "attendance",
+            filter=Q(attendance__status=Attendance.Status.PRESENT),
+            distinct=True,
+        ),
+        ignored=Count(
+            "attendance",
+            filter=Q(attendance__status=Attendance.Status.IGNORED),
+            distinct=True,
         ),
         played=Count(
             "teams__tournament",
@@ -119,7 +135,11 @@ def activity_board():
                 "nick": player.nick,
                 "avatar_url": player.avatar_url,
                 **_activity_shape(
-                    player.attended, player.played, total_events, total_tournaments
+                    player.attended,
+                    player.played,
+                    total_events,
+                    total_tournaments,
+                    player.ignored,
                 ),
             }
         )
