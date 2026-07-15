@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from django.db.models import Count, Q, Sum
 
-from .models import Match, MatchStat, Tournament
+from .models import Attendance, Event, Match, MatchStat, Player, Tournament
 
 
 def _shape(kills, deaths, matches, wins):
@@ -59,6 +59,72 @@ def leaderboard(team_size=None, season=None):
             }
         )
     return result
+
+
+def _activity_totals():
+    """Kolik bylo příležitostí být aktivní: akce + turnaje, které reálně proběhly.
+
+    Turnaje ve stavu přípravy se nepočítají — ještě se nehrály.
+    """
+    total_events = Event.objects.count()
+    total_tournaments = Tournament.objects.exclude(
+        status=Tournament.Status.DRAFT
+    ).count()
+    return total_events, total_tournaments
+
+
+def _activity_shape(attended, played, total_events, total_tournaments):
+    opportunities = total_events + total_tournaments
+    done = attended + played
+    return {
+        "events_attended": attended,
+        "events_total": total_events,
+        "tournaments_played": played,
+        "tournaments_total": total_tournaments,
+        "activity_rate": round(done / opportunities, 3) if opportunities else 0.0,
+    }
+
+
+def player_activity(player):
+    """Kombinovaná aktivita hráče: docházka na akcích + účast v turnajích."""
+    total_events, total_tournaments = _activity_totals()
+    attended = Attendance.objects.filter(player=player, present=True).count()
+    played = (
+        Tournament.objects.exclude(status=Tournament.Status.DRAFT)
+        .filter(teams__members=player)
+        .distinct()
+        .count()
+    )
+    return _activity_shape(attended, played, total_events, total_tournaments)
+
+
+def activity_board():
+    """Žebříček aktivity všech hráčů (akce + turnaje), seřazený od nejaktivnějších."""
+    total_events, total_tournaments = _activity_totals()
+    players = Player.objects.annotate(
+        attended=Count(
+            "attendance", filter=Q(attendance__present=True), distinct=True
+        ),
+        played=Count(
+            "teams__tournament",
+            filter=~Q(teams__tournament__status=Tournament.Status.DRAFT),
+            distinct=True,
+        ),
+    )
+    rows = []
+    for player in players:
+        rows.append(
+            {
+                "id": player.id,
+                "nick": player.nick,
+                "avatar_url": player.avatar_url,
+                **_activity_shape(
+                    player.attended, player.played, total_events, total_tournaments
+                ),
+            }
+        )
+    rows.sort(key=lambda r: (r["activity_rate"], r["events_attended"]), reverse=True)
+    return rows
 
 
 def league_table(tournament):
