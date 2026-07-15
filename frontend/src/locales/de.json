@@ -6,13 +6,31 @@
     "archive": "Archiv",
     "leaderboards": "Ranglisten",
     "players": "Spieler",
+    "activity": "Aktivität",
     "login": "Anmelden",
     "logout": "Abmelden",
     "admin": "Admin",
     "changePassword": "Passwort ändern",
     "adminTournaments": "Turniere verwalten",
     "adminPlayers": "Spieler verwalten",
+    "adminEvents": "Events verwalten",
     "adminNews": "News verwalten"
+  },
+  "activity": {
+    "title": "Clan-Aktivität",
+    "boardTitle": "Aktivität der Mitglieder",
+    "member": "Mitglied",
+    "eventsCol": "Events",
+    "tournamentsCol": "Turniere",
+    "rate": "Aktivität",
+    "hint": "Aktivität = Anwesenheit bei Events + Teilnahme an stattgefundenen Turnieren. Turniere in Vorbereitung zählen nicht.",
+    "events": "Events",
+    "attendance": "Anwesenheit",
+    "present": "Anwesend",
+    "absent": "Abwesend",
+    "noEvents": "Noch keine Events.",
+    "noPlayers": "Noch keine Spieler.",
+    "noAttendance": "Für dieses Event wurde die Anwesenheit noch nicht erfasst."
   },
   "common": {
     "loading": "Wird geladen…",
@@ -220,6 +238,14 @@
     "pointsPerKill": "Punkte pro Kill",
     "eventDate": "Turnierdatum",
     "prizePool": "Prize Pool (€)",
-    "streamUrl": "Livestream-URL (YouTube)"
+    "streamUrl": "Livestream-URL (YouTube)",
+    "eventsTitle": "Events verwalten",
+    "newEvent": "Neues Event",
+    "eventName": "Event-Name",
+    "createEvent": "Event anlegen",
+    "markAll": "Alle markieren",
+    "saveAttendance": "Anwesenheit speichern",
+    "attendanceSaved": "Anwesenheit gespeichert.",
+    "noPlayersYet": "Lege zuerst Spieler unter Spieler verwalten an."
   }
 }

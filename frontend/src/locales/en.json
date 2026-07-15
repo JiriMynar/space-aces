@@ -6,13 +6,31 @@
     "archive": "Archive",
     "leaderboards": "Leaderboards",
     "players": "Players",
+    "activity": "Activity",
     "login": "Log in",
     "logout": "Log out",
     "admin": "Admin",
     "changePassword": "Change password",
     "adminTournaments": "Manage tournaments",
     "adminPlayers": "Manage players",
+    "adminEvents": "Manage events",
     "adminNews": "Manage news"
+  },
+  "activity": {
+    "title": "Clan activity",
+    "boardTitle": "Member activity",
+    "member": "Member",
+    "eventsCol": "Events",
+    "tournamentsCol": "Tournaments",
+    "rate": "Activity",
+    "hint": "Activity = attendance at events + participation in tournaments that took place. Tournaments still in preparation don't count.",
+    "events": "Events",
+    "attendance": "Attendance",
+    "present": "Present",
+    "absent": "Absent",
+    "noEvents": "No events yet.",
+    "noPlayers": "No players yet.",
+    "noAttendance": "Attendance has not been filled in for this event yet."
   },
   "common": {
     "loading": "Loading…",
@@ -220,6 +238,14 @@
     "pointsPerKill": "Points per kill",
     "eventDate": "Event date",
     "prizePool": "Prize pool (€)",
-    "streamUrl": "Live stream URL (YouTube)"
+    "streamUrl": "Live stream URL (YouTube)",
+    "eventsTitle": "Manage events",
+    "newEvent": "New event",
+    "eventName": "Event name",
+    "createEvent": "Create event",
+    "markAll": "Mark all",
+    "saveAttendance": "Save attendance",
+    "attendanceSaved": "Attendance saved.",
+    "noPlayersYet": "Add players in Manage players first."
   }
 }
