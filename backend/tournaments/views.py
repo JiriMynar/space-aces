@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .bracket import advance_winner, generate_single_elimination
+from .bracket import advance_winner, generate_league, generate_single_elimination
 from .models import (
     Match,
     MatchStat,
@@ -32,7 +32,7 @@ from .serializers import (
     TournamentDetailSerializer,
     TournamentListSerializer,
 )
-from .stats import hall_of_fame, leaderboard, player_stats
+from .stats import hall_of_fame, leaderboard, league_table, player_stats
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -90,10 +90,11 @@ class TournamentViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"])
     def generate_bracket(self, request, pk=None):
+        """Vygeneruje pavouk (vyřazovací), nebo rozlosování ligy (bodovací)."""
         tournament = self.get_object()
         if not tournament.is_editable:
             return Response(
-                {"detail": "Pavouk lze generovat jen ve stavu přípravy."},
+                {"detail": "Rozlosování lze generovat jen ve stavu přípravy."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         serializer = GenerateBracketSerializer(data=request.data)
@@ -119,8 +120,17 @@ class TournamentViewSet(viewsets.ModelViewSet):
             team.seed = i
             team.save(update_fields=["seed"])
 
-        generate_single_elimination(tournament, teams)
+        if tournament.mode == Tournament.Mode.LEAGUE:
+            generate_league(tournament, teams)
+        else:
+            generate_single_elimination(tournament, teams)
         return Response(TournamentDetailSerializer(tournament).data)
+
+    @action(detail=True, methods=["get"])
+    def standings(self, request, pk=None):
+        """Ligová tabulka (bodovací režim)."""
+        tournament = self.get_object()
+        return Response(league_table(tournament))
 
     @staticmethod
     def _team_rating(team):
@@ -315,7 +325,9 @@ class MatchViewSet(viewsets.ReadOnlyModelViewSet):
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 
-        if data["score_a"] == data["score_b"]:
+        is_league = match.round.tournament.mode == Tournament.Mode.LEAGUE
+        tie = data["score_a"] == data["score_b"]
+        if tie and not is_league:
             return Response(
                 {"detail": "Remíza není v pavouku možná — musí být vítěz."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -328,14 +340,21 @@ class MatchViewSet(viewsets.ReadOnlyModelViewSet):
 
         match.score_a = data["score_a"]
         match.score_b = data["score_b"]
-        match.winner = (
-            match.team_a if data["score_a"] > data["score_b"] else match.team_b
-        )
+        if tie:
+            match.winner = None  # remíza (jen v lize)
+        else:
+            match.winner = (
+                match.team_a if data["score_a"] > data["score_b"] else match.team_b
+            )
         match.status = Match.Status.COMPLETED
         match.played_at = timezone.now()
         match.save()
 
-        winner_ids = set(match.winner.members.values_list("id", flat=True))
+        winner_ids = (
+            set(match.winner.members.values_list("id", flat=True))
+            if match.winner
+            else set()
+        )
         for row in data.get("stats", []):
             MatchStat.objects.update_or_create(
                 match=match,

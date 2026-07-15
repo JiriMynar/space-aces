@@ -93,6 +93,48 @@ def generate_single_elimination(tournament, teams):
     return rounds
 
 
+@transaction.atomic
+def generate_league(tournament, teams):
+    """Vygeneruje rozlosování ligy (každý s každým) — round-robin.
+
+    Použije okružní (circle) metodu: každý tým hraje s každým jednou. Zápasy
+    se rozdělí do kol (matchday). Lichý počet týmů → jeden tým má v kole volno.
+    Zápasy nemají navazující slot (žádné vyřazování).
+    """
+    n = len(teams)
+    if n < 2:
+        raise ValueError("Liga potřebuje aspoň 2 týmy.")
+
+    tournament.rounds.all().delete()
+
+    lst = list(teams)
+    if n % 2 == 1:
+        lst.append(None)  # "bye" — tým, který v daném kole nehraje
+    m = len(lst)
+    half = m // 2
+    rounds_count = m - 1
+    arr = lst[:]
+
+    for r in range(rounds_count):
+        round_obj = Round.objects.create(
+            tournament=tournament,
+            index=r + 1,
+            bracket_side=Round.Side.WINNERS,
+        )
+        pos = 0
+        for i in range(half):
+            a, b = arr[i], arr[m - 1 - i]
+            if a is not None and b is not None:
+                Match.objects.create(
+                    round=round_obj, position=pos, team_a=a, team_b=b
+                )
+                pos += 1
+        # Rotace: první tým drží pozici, ostatní se otočí o jedno.
+        arr = [arr[0]] + [arr[-1]] + arr[1:-1]
+
+    return tournament.rounds.all()
+
+
 def _resolve_bye(match):
     """Pokud má zápas jen jeden tým, prohlásí ho za vítěze a postoupí ho dál."""
     has_a = match.team_a is not None

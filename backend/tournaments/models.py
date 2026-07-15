@@ -30,6 +30,10 @@ class Tournament(models.Model):
         SINGLE = "single", "Single elimination"
         DOUBLE = "double", "Double elimination"
 
+    class Mode(models.TextChoices):
+        ELIMINATION = "elimination", "Vyřazovací (pavouk)"
+        LEAGUE = "league", "Bodovací (tabulka)"
+
     class Status(models.TextChoices):
         DRAFT = "draft", "Příprava"
         IN_PROGRESS = "in_progress", "Probíhá"
@@ -43,6 +47,10 @@ class Tournament(models.Model):
     name = models.CharField(max_length=200)
     # Počet hráčů v týmu: 1 = 1v1, 2 = 2v2, ... 5 = 5v5.
     team_size = models.PositiveSmallIntegerField(default=1)
+    # Režim turnaje: vyřazovací pavouk, nebo bodovací liga (tabulka, každý s každým).
+    mode = models.CharField(
+        max_length=12, choices=Mode.choices, default=Mode.ELIMINATION
+    )
     bracket_type = models.CharField(
         max_length=10, choices=BracketType.choices, default=BracketType.SINGLE
     )
@@ -51,6 +59,13 @@ class Tournament(models.Model):
     )
     seeding_method = models.CharField(
         max_length=10, choices=Seeding.choices, default=Seeding.RANDOM
+    )
+    # Bodování pro ligový režim — nastavitelné adminem turnaje.
+    points_per_win = models.DecimalField(max_digits=4, decimal_places=2, default=1)
+    points_per_draw = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+    points_per_loss = models.DecimalField(max_digits=4, decimal_places=2, default=0)
+    points_per_kill = models.DecimalField(
+        max_digits=4, decimal_places=2, default="0.5"
     )
     # Volný textový štítek sezóny pro filtrování žebříčků, např. "2026-S1".
     season = models.CharField(max_length=32, blank=True)

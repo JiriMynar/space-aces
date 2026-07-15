@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from django.db.models import Count, Q, Sum
 
-from .models import MatchStat, Tournament
+from .models import Match, MatchStat, Tournament
 
 
 def _shape(kills, deaths, matches, wins):
@@ -61,6 +61,85 @@ def leaderboard(team_size=None, season=None):
     return result
 
 
+def league_table(tournament):
+    """Ligová tabulka turnaje (bodovací režim), řazená jako ve fotbale.
+
+    Pro každý tým: odehráno, výhry, remízy, prohry, killy a body podle
+    nastaveného bodování turnaje (výhra/remíza/prohra + bod za kill).
+    Řazeno podle bodů, pak výher, pak killů.
+    """
+    teams = list(tournament.teams.prefetch_related("members").all())
+    rows = {
+        team.id: {
+            "team_id": team.id,
+            "name": team.name,
+            "seed": team.seed,
+            "played": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "kills": 0,
+            "points": 0.0,
+        }
+        for team in teams
+    }
+
+    matches = Match.objects.filter(
+        round__tournament=tournament,
+        status=Match.Status.COMPLETED,
+        team_a__isnull=False,
+        team_b__isnull=False,
+    )
+    for match in matches:
+        a = rows.get(match.team_a_id)
+        b = rows.get(match.team_b_id)
+        if not a or not b:
+            continue
+        a["played"] += 1
+        b["played"] += 1
+        if match.winner_id is None:
+            a["draws"] += 1
+            b["draws"] += 1
+        elif match.winner_id == match.team_a_id:
+            a["wins"] += 1
+            b["losses"] += 1
+        else:
+            b["wins"] += 1
+            a["losses"] += 1
+
+    # Killy na tým = součet killů jeho hráčů v zápasech tohoto turnaje.
+    member_team = {}
+    for team in teams:
+        for player in team.members.all():
+            member_team[player.id] = team.id
+    kill_rows = (
+        MatchStat.objects.filter(match__round__tournament=tournament)
+        .values("player_id")
+        .annotate(k=Sum("kills"))
+    )
+    for row in kill_rows:
+        team_id = member_team.get(row["player_id"])
+        if team_id in rows:
+            rows[team_id]["kills"] += row["k"] or 0
+
+    ppw = float(tournament.points_per_win)
+    ppd = float(tournament.points_per_draw)
+    ppl = float(tournament.points_per_loss)
+    ppk = float(tournament.points_per_kill)
+    result = []
+    for row in rows.values():
+        row["points"] = round(
+            row["wins"] * ppw
+            + row["draws"] * ppd
+            + row["losses"] * ppl
+            + row["kills"] * ppk,
+            2,
+        )
+        result.append(row)
+    result.sort(key=lambda r: (r["points"], r["wins"], r["kills"]), reverse=True)
+    return result
+
+
 def _apply_filters(qs, team_size, season):
     if team_size:
         qs = qs.filter(match__round__tournament__team_size=team_size)
@@ -83,8 +162,10 @@ def hall_of_fame():
     podiums = defaultdict(int)
     info = {}  # player_id -> (nick, avatar_url)
 
+    # Šampiony mají jen vyřazovací turnaje (liga má tabulku, ne finále).
     tournaments = Tournament.objects.filter(
-        status=Tournament.Status.COMPLETED
+        status=Tournament.Status.COMPLETED,
+        mode=Tournament.Mode.ELIMINATION,
     ).prefetch_related("rounds__matches", "teams__members")
 
     for tournament in tournaments:
