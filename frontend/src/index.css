@@ -309,6 +309,40 @@ th {
   margin: 0.4rem 0 0;
 }
 
+/* Přehled posledního turnaje */
+.last-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.lr-winner {
+  font-size: 1.1rem;
+}
+.lr-standings {
+  margin: 0.2rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+}
+
+/* Tlačítko živého přenosu */
+.stream-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4em 0.9em;
+  border-radius: var(--radius);
+  border: 1px solid var(--ember);
+  color: var(--text);
+  background: rgba(255, 59, 48, 0.14);
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+.stream-btn:hover {
+  background: rgba(255, 59, 48, 0.28);
+  color: var(--text);
+}
+
 /* Vybraný turnaj (inline, bez rámečku) */
 .home-featured .featured-inline {
   display: flex;

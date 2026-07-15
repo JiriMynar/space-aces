@@ -34,7 +34,14 @@ export default function TournamentDetail() {
         <p className="muted">
           {tournament.format_label} · {t(`mode.${tournament.mode}`)}
           {tournament.season ? ` · ${tournament.season}` : ''}
+          {tournament.event_date ? ` · 📅 ${tournament.event_date}` : ''}
+          {tournament.prize_pool && Number(tournament.prize_pool) > 0 ? ` · 💰 ${Number(tournament.prize_pool)} €` : ''}
         </p>
+        {tournament.stream_url && (
+          <a href={tournament.stream_url} target="_blank" rel="noreferrer" className="stream-btn" style={{ marginTop: '0.4rem', display: 'inline-block' }}>
+            🔴 {t('home.watchLive')}
+          </a>
+        )}
       </div>
 
       {tournament.mode === 'league' ? (

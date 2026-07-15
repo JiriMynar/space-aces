@@ -7,11 +7,17 @@ import Avatar from '../components/Avatar'
 
 const MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' }
 
+function money(value) {
+  if (value == null || Number(value) <= 0) return null
+  return `${Number(value)} €`
+}
+
 export default function Home() {
   const { t } = useTranslation()
   const [featured, setFeatured] = useState(null)
   const [hof, setHof] = useState([])
   const [news, setNews] = useState([])
+  const [lastResult, setLastResult] = useState(null)
 
   useEffect(() => {
     api.get('/tournaments/').then(({ data }) => {
@@ -22,6 +28,7 @@ export default function Home() {
     })
     api.get('/hall-of-fame/').then(({ data }) => setHof(data)).catch(() => setHof([]))
     api.get('/news/').then(({ data }) => setNews(data.results || data)).catch(() => setNews([]))
+    api.get('/last-result/').then(({ data }) => setLastResult(data)).catch(() => setLastResult(null))
   }, [])
 
   const top3 = hof.slice(0, 3)
@@ -39,6 +46,35 @@ export default function Home() {
       </header>
 
       <p className="home-intro">{t('home.introText')}</p>
+
+      {lastResult && lastResult.winner && (
+        <section>
+          <h2 className="section-title">🏁 {t('home.lastResult')}</h2>
+          <div className="last-result">
+            <div>
+              <Link to={`/tournaments/${lastResult.id}`} className="featured-name">{lastResult.name}</Link>
+              <span className="muted"> · {lastResult.format_label} · {t(`mode.${lastResult.mode}`)}</span>
+            </div>
+            {(lastResult.event_date || money(lastResult.prize_pool)) && (
+              <div className="muted" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', fontSize: '0.9rem' }}>
+                {lastResult.event_date && <span>📅 {lastResult.event_date}</span>}
+                {money(lastResult.prize_pool) && <span>💰 {money(lastResult.prize_pool)}</span>}
+              </div>
+            )}
+            <div className="lr-winner">🏆 <strong>{lastResult.winner.name}</strong> <span className="muted">— {t('home.winner')}</span></div>
+            {lastResult.mode === 'league' && (lastResult.standings || []).length > 0 && (
+              <ol className="lr-standings muted">
+                {lastResult.standings.map((row, i) => (
+                  <li key={row.team_id}>{i + 1}. {row.name} — {row.points} {t('league.points')}</li>
+                ))}
+              </ol>
+            )}
+            {lastResult.mode !== 'league' && lastResult.runner_up && (
+              <div className="muted" style={{ fontSize: '0.9rem' }}>🥈 {lastResult.runner_up.name}</div>
+            )}
+          </div>
+        </section>
+      )}
 
       {news.length > 0 && (
         <section>
@@ -89,9 +125,18 @@ export default function Home() {
           <div className="featured-inline">
             <div>
               <Link to={`/tournaments/${featured.id}`} className="featured-name">{featured.name}</Link>
-              <span className="muted"> · {featured.format_label} · {t(`bracketType.${featured.bracket_type}`)}</span>
+              <span className="muted">
+                {' · '}{featured.format_label} · {t(`mode.${featured.mode}`)}
+                {featured.event_date ? ` · 📅 ${featured.event_date}` : ''}
+                {money(featured.prize_pool) ? ` · 💰 ${money(featured.prize_pool)}` : ''}
+              </span>
             </div>
-            <span className={statusBadgeClass(featured.status)}>{t(`status.${featured.status}`)}</span>
+            <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
+              {featured.stream_url && (
+                <a href={featured.stream_url} target="_blank" rel="noreferrer" className="stream-btn">🔴 {t('home.watchLive')}</a>
+              )}
+              <span className={statusBadgeClass(featured.status)}>{t(`status.${featured.status}`)}</span>
+            </div>
           </div>
         ) : (
           <p className="muted">{t('home.noTournament')}</p>

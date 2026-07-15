@@ -12,6 +12,9 @@ const EMPTY = {
   seeding_method: 'random',
   season: '',
   description: '',
+  event_date: '',
+  prize_pool: '',
+  stream_url: '',
   points_per_win: '1',
   points_per_draw: '0',
   points_per_loss: '0',
@@ -43,6 +46,9 @@ export default function AdminTournaments() {
       const { data: created } = await api.post('/tournaments/', {
         ...form,
         team_size: Number(form.team_size),
+        // Prázdné datum/prize pošli jako null (DateField/DecimalField neberou '').
+        event_date: form.event_date || null,
+        prize_pool: form.prize_pool === '' ? null : form.prize_pool,
       })
       // Volitelně rovnou načti celou uloženou soupisku (všechny týmy naráz).
       if (lineupId) {
@@ -124,6 +130,20 @@ export default function AdminTournaments() {
           placeholder={t('tournaments.season') + ' (2026-S1)'}
           value={form.season}
           onChange={(e) => setForm({ ...form, season: e.target.value })}
+        />
+        <label>
+          <div className="muted" style={{ fontSize: '0.8rem' }}>{t('admin.eventDate')}</div>
+          <input type="date" value={form.event_date} onChange={(e) => setForm({ ...form, event_date: e.target.value })} />
+        </label>
+        <label>
+          <div className="muted" style={{ fontSize: '0.8rem' }}>{t('admin.prizePool')}</div>
+          <input type="number" min="0" step="1" placeholder="0" value={form.prize_pool} onChange={(e) => setForm({ ...form, prize_pool: e.target.value })} />
+        </label>
+        <input
+          type="url"
+          placeholder={t('admin.streamUrl')}
+          value={form.stream_url}
+          onChange={(e) => setForm({ ...form, stream_url: e.target.value })}
         />
         {error && <p style={{ color: 'var(--lose)' }}>{error}</p>}
         <button type="submit" className="primary">{t('admin.createTournament')}</button>
