@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 from .models import (
+    Attendance,
+    Event,
     Match,
     MatchStat,
     News,
@@ -61,6 +63,19 @@ class MatchAdmin(admin.ModelAdmin):
 class NewsAdmin(admin.ModelAdmin):
     list_display = ("title", "created_at")
     search_fields = ("title", "body")
+
+
+class AttendanceInline(admin.TabularInline):
+    model = Attendance
+    extra = 0
+
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ("name", "event_date")
+    list_filter = ("event_date",)
+    search_fields = ("name",)
+    inlines = [AttendanceInline]
 
 
 class TeamSetTeamInline(admin.TabularInline):

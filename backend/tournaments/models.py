@@ -253,6 +253,41 @@ class News(models.Model):
         return self.title
 
 
+class Event(models.Model):
+    """Klanová akce (trénink, sraz, operace) — eviduje se u ní docházka členů."""
+
+    name = models.CharField(max_length=200)
+    event_date = models.DateField()
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-event_date", "-created_at"]
+
+    def __str__(self):
+        return f"{self.name} ({self.event_date})"
+
+
+class Attendance(models.Model):
+    """Docházka jednoho hráče na jedné akci. Binární: byl / nebyl."""
+
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="attendance"
+    )
+    player = models.ForeignKey(
+        Player, on_delete=models.CASCADE, related_name="attendance"
+    )
+    present = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("event", "player")
+        ordering = ["player__nick"]
+
+    def __str__(self):
+        mark = "byl" if self.present else "nebyl"
+        return f"{self.player.nick} — {self.event.name}: {mark}"
+
+
 class TeamSet(models.Model):
     """Uložené složení celého turnaje — sada týmů k opakovanému použití.
 
