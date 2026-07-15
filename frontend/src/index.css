@@ -419,7 +419,7 @@ th {
 
 /* --- Docházka a klanová aktivita --- */
 
-/* Ukazatel byl/nebyl */
+/* Ukazatel stavu docházky: byl / online-nepřidal se / nebyl */
 .att-dot {
   width: 12px;
   height: 12px;
@@ -430,6 +430,10 @@ th {
 .att-dot.on {
   background: var(--win);
   box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+}
+.att-dot.warn {
+  background: #f0b429;
+  box-shadow: 0 0 8px rgba(240, 180, 41, 0.5);
 }
 .att-dot.off {
   background: var(--lose);
@@ -538,6 +542,9 @@ th {
 }
 .att-edit-row.is-present {
   border-color: rgba(52, 211, 153, 0.5);
+}
+.att-edit-row.is-ignored {
+  border-color: rgba(240, 180, 41, 0.5);
 }
 .att-edit-row.is-absent {
   border-color: rgba(248, 113, 113, 0.35);
