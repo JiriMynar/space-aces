@@ -8,7 +8,6 @@ from .models import (
     News,
     Player,
     Round,
-    SavedTeam,
     Team,
     TeamMembership,
     TeamSet,
@@ -182,22 +181,6 @@ class PlayerMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
         fields = ["id", "nick", "avatar_url"]
-
-
-class SavedTeamSerializer(serializers.ModelSerializer):
-    members = PlayerMiniSerializer(many=True, read_only=True)
-    member_ids = serializers.PrimaryKeyRelatedField(
-        queryset=Player.objects.all(), many=True, write_only=True, source="members"
-    )
-    size = serializers.SerializerMethodField()
-
-    class Meta:
-        model = SavedTeam
-        fields = ["id", "name", "members", "member_ids", "size", "created_at"]
-        read_only_fields = ["created_at"]
-
-    def get_size(self, obj):
-        return obj.members.count()
 
 
 class TeamSetTeamSerializer(serializers.ModelSerializer):

@@ -14,7 +14,6 @@ from .models import (
     MatchStat,
     News,
     Player,
-    SavedTeam,
     Team,
     TeamMembership,
     TeamSet,
@@ -28,7 +27,6 @@ from .serializers import (
     NewsSerializer,
     PlayerSerializer,
     ReorderSerializer,
-    SavedTeamSerializer,
     TeamSerializer,
     TeamSetSerializer,
     TournamentDetailSerializer,
@@ -66,14 +64,6 @@ class NewsViewSet(viewsets.ModelViewSet):
 
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    permission_classes = [IsAdminOrReadOnly]
-
-
-class SavedTeamViewSet(viewsets.ModelViewSet):
-    """Uložené sestavy týmů pro opakované použití (klonování do turnajů)."""
-
-    queryset = SavedTeam.objects.prefetch_related("members").all()
-    serializer_class = SavedTeamSerializer
     permission_classes = [IsAdminOrReadOnly]
 
 
@@ -212,12 +202,37 @@ class TournamentViewSet(viewsets.ModelViewSet):
         return Response(TournamentDetailSerializer(tournament).data)
 
     @action(detail=True, methods=["post"])
-    def shuffle_teams(self, request, pk=None):
+    def shuffle_seeds(self, request, pk=None):
+        """Náhodně zamíchá pořadí (nasazení) týmů — kdo proti komu v pavouku."""
+        tournament = self.get_object()
+        if not tournament.is_editable:
+            return Response(
+                {"detail": "Pořadí lze měnit jen ve stavu přípravy."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        teams = list(tournament.teams.all())
+        if len(teams) < 2:
+            return Response(
+                {"detail": "Aspoň 2 týmy jsou potřeba."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        order = list(range(1, len(teams) + 1))
+        random.shuffle(order)
+        for team, seed in zip(teams, order):
+            team.seed = seed
+            team.save(update_fields=["seed"])
+        # Zamíchané pořadí je ruční nasazení — respektuj ho při generování.
+        tournament.seeding_method = Tournament.Seeding.MANUAL
+        tournament.save(update_fields=["seeding_method"])
+        return Response(TournamentDetailSerializer(tournament).data)
+
+    @action(detail=True, methods=["post"])
+    def shuffle_players(self, request, pk=None):
         """Náhodně přemíchá hráče mezi týmy (zachová počet týmů i velikost)."""
         tournament = self.get_object()
         if not tournament.is_editable:
             return Response(
-                {"detail": "Týmy lze míchat jen ve stavu přípravy."},
+                {"detail": "Hráče lze míchat jen ve stavu přípravy."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         teams = list(tournament.teams.all())
