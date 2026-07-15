@@ -98,7 +98,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"])
     def set_attendance(self, request, pk=None):
-        """Hromadný zápis docházky: [{player, present}, ...]. Idempotentní."""
+        """Hromadný zápis docházky: [{player, status}, ...]. Idempotentní."""
         event = self.get_object()
         serializer = SetAttendanceSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -106,7 +106,7 @@ class EventViewSet(viewsets.ModelViewSet):
             Attendance.objects.update_or_create(
                 event=event,
                 player=row["player"],
-                defaults={"present": row["present"]},
+                defaults={"status": row["status"]},
             )
         event = self.get_queryset().get(pk=event.pk)
         return Response(EventDetailSerializer(event).data)
