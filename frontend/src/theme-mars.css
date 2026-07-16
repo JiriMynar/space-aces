@@ -60,7 +60,7 @@
   }
 }
 
-/* Hero nadpis — Krona One, bílý se září jako „MARS“ v referenci */
+/* Hero nadpis - Krona One, bily se zari jako MARS v referenci */
 .home-hero h1 {
   font-family: var(--font-display);
   font-size: clamp(2.1rem, 7vw, 4rem);
