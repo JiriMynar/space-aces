@@ -2,9 +2,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth/AuthContext'
 import LanguageSwitcher from './LanguageSwitcher'
-
-// public/hero.jpg — pozadí celé aplikace (BASE_URL kvůli dev '/' vs produkce '/static/').
-const bgUrl = `${import.meta.env.BASE_URL}hero.jpg`
+import marsBg from '../marsBg'
 
 export default function Layout() {
   const { t } = useTranslation()
@@ -18,7 +16,7 @@ export default function Layout() {
 
   return (
     <>
-      <div className="app-bg" style={{ backgroundImage: `url(${bgUrl})` }} aria-hidden="true" />
+      <div className="app-bg" style={{ backgroundImage: `url(${marsBg})` }} aria-hidden="true" />
       <nav className="nav">
         <NavLink to="/" className="brand">
           {t('brand')}
