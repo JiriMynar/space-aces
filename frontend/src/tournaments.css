@@ -7,6 +7,21 @@
 
 .tl { display: flex; flex-direction: column; gap: 1rem; }
 
+/* Filtrovaci lista (segment) */
+.tl-bar { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+.tl-seg { display: flex; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+.tl-seg button {
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.5rem 0.9rem; background: transparent; color: var(--text-dim);
+  border: none; border-right: 1px solid var(--border); border-radius: 0; cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+}
+.tl-seg button:last-child { border-right: none; }
+.tl-seg button:hover { color: var(--text); box-shadow: none; border-color: var(--border); }
+.tl-seg button.on { background: var(--mars); color: #1a0d07; font-weight: 700; }
+.tl-seg .n { opacity: 0.55; margin-left: 0.4rem; font-variant-numeric: tabular-nums; }
+.tl-seg button.on .n { opacity: 0.8; }
+
 /* Vyzdvizeny (probihajici) turnaj */
 .tl-feat {
   position: relative;
