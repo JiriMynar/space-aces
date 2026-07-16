@@ -5,7 +5,6 @@
    ============================================================ */
 
 :root {
-  /* Podklad - tepla vesmirna cern */
   --bg: #0b0910;
   --bg-panel: #17121d;
   --bg-panel-2: #1e1726;
@@ -13,12 +12,10 @@
   --border-glow: #7a4a2e;
   --shadow-glow: 0 0 22px rgba(255, 106, 43, 0.16);
 
-  /* Text - tepla bila / tepla seda */
   --text: #f2ece9;
   --text-dim: #a99ca0;
   --faint: #786c74;
 
-  /* Akcenty - Mars (tepla rez) + instrument (cyan) */
   --accent: #ff6a2b;
   --accent-2: #35c9d6;
   --accent-warm: #ff6a2b;
@@ -26,6 +23,9 @@
   --mars-deep: #d8431e;
   --ember: #ff9a5c;
   --inst: #35c9d6;
+  --gold: #f0b447;
+  --silver: #c9cfda;
+  --bronze: #cd7f45;
 
   --win: #37c98a;
   --lose: #f2634e;
@@ -35,7 +35,6 @@
   --font-mono: ui-monospace, 'Cascadia Mono', 'SFMono-Regular', Consolas, monospace;
 }
 
-/* Podklad stranky - marsovska zare vpravo nahore + tepla hloubka */
 body {
   background:
     radial-gradient(1200px 700px at 92% -10%, rgba(255, 106, 43, 0.15), transparent 55%),
@@ -45,7 +44,6 @@ body {
   background-attachment: fixed;
 }
 
-/* Odkazy = instrument (cyan) */
 a { color: var(--accent-2); }
 a:hover { color: var(--text); }
 
@@ -117,7 +115,7 @@ button.primary:hover {
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02) inset, var(--shadow-glow);
 }
 
-/* ---------- SEKCNI NADPISY ---------- */
+/* ---------- SEKCNI NADPISY (ostatni stranky) ---------- */
 .section-title {
   font-family: var(--font-mono);
   font-size: 0.92rem;
@@ -153,24 +151,24 @@ button.primary:hover {
 }
 .home-hero p { color: var(--text-dim); }
 
-/* ---------- MARS V POZADI ---------- */
+/* ---------- MARS V POZADI (vyraznejsi, svetlejsi, v zaberu) ---------- */
 .app-bg {
   inset: auto;
-  top: -90px;
-  right: -120px;
+  top: -40px;
+  right: -70px;
   left: auto;
   bottom: auto;
-  width: min(60vw, 640px);
-  height: min(60vw, 640px);
+  width: min(70vw, 720px);
+  height: min(70vw, 720px);
   background-size: contain;
   background-position: top right;
   background-repeat: no-repeat;
-  filter: drop-shadow(0 0 80px rgba(255, 90, 40, 0.42));
+  filter: brightness(1.18) saturate(1.12) drop-shadow(0 0 100px rgba(255, 100, 50, 0.5));
   opacity: 1;
 }
 .app-bg::after { content: none; }
 @media (max-width: 700px) {
-  .app-bg { top: -50px; right: -110px; width: 92vw; height: 92vw; opacity: 0.55; }
+  .app-bg { top: -20px; right: -90px; width: 96vw; height: 96vw; opacity: 0.6; }
 }
 
 /* ---------- TABULKY ---------- */
@@ -186,12 +184,6 @@ tbody tr:hover td { background: rgba(255, 106, 43, 0.05); }
 .badge { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.1em; }
 .badge.live { color: var(--inst); border-color: var(--inst); box-shadow: 0 0 12px rgba(53, 201, 214, 0.25); }
 
-/* ---------- PODIUM ---------- */
-.podium-bar { color: rgba(0, 0, 0, 0.6); }
-.podium-name { color: var(--text); }
-.podium-ach { font-family: var(--font-mono); }
-.podium-ach .ach-title { color: var(--mars); }
-
 /* ---------- AVATAR INITIALY = instrument ---------- */
 .avatar-fallback { color: var(--inst); }
 
@@ -201,9 +193,82 @@ tbody tr:hover td { background: rgba(255, 106, 43, 0.05); }
 /* ---------- LIGA / PAVOUK ---------- */
 .fixture-team.fx-win { color: var(--mars); }
 .fixture-score { font-family: var(--font-mono); }
-
-/* ---------- STREAM ---------- */
 .stream-btn { font-family: var(--font-mono); letter-spacing: 0.08em; }
-
-/* ---------- AKTIVITA - mono cisla ---------- */
 .activity-num { font-family: var(--font-mono); }
+
+/* ============================================================
+   DOMU  -  eyebrow, sekcni hlavy, podium karty, empty stavy
+   ============================================================ */
+
+.mo-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--mars);
+  margin-bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.mo-eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--mars); }
+
+.mo-head { display: flex; align-items: center; gap: 0.9rem; margin: 0 0 1.1rem; }
+.mo-idx { font-family: var(--font-mono); font-size: 0.8rem; color: var(--mars); letter-spacing: 0.1em; }
+.mo-title {
+  font-family: var(--font-mono);
+  font-size: 0.9rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text); margin: 0;
+}
+.mo-rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+
+/* Podium karty */
+.pod-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9rem; }
+.pod {
+  position: relative;
+  background: linear-gradient(180deg, rgba(30, 23, 38, 0.7), rgba(20, 16, 25, 0.6));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1rem;
+  overflow: hidden;
+  min-height: 120px;
+}
+.pod::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--border); }
+.pod.p1::before { background: var(--gold); box-shadow: 0 0 16px var(--gold); }
+.pod.p2::before { background: var(--silver); }
+.pod.p3::before { background: var(--bronze); }
+.pod.empty { border-style: dashed; opacity: 0.75; }
+.pod-rank { font-family: var(--font-mono); font-size: 0.78rem; color: var(--faint); letter-spacing: 0.12em; }
+.pod.p1 .pod-rank { color: var(--gold); }
+.pod-id { display: flex; align-items: center; gap: 0.6rem; margin: 0.6rem 0 0.7rem; }
+.pod-name { font-size: 1.15rem; font-weight: 700; color: var(--text); }
+a.pod-name:hover { color: var(--ember); }
+.pod-name.pod-vacant { color: var(--faint); font-size: 1.7rem; margin: 0.55rem 0 0.45rem; }
+.pod-empty-note { font-family: var(--font-mono); font-size: 0.64rem; color: var(--faint); letter-spacing: 0.03em; }
+.pod-stats { display: flex; gap: 1.4rem; }
+.pod-stats > div { display: flex; flex-direction: column; gap: 0.1rem; }
+.pod-stats b { font-family: var(--font-mono); font-size: 1.15rem; color: var(--text); font-variant-numeric: tabular-nums; }
+.pod-stats span { font-family: var(--font-mono); font-size: 0.58rem; color: var(--faint); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Vybrany turnaj / posledni vysledek / empty */
+.mo-feat { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.mo-feat-l { display: flex; flex-direction: column; gap: 0.5rem; }
+.mo-feat-name { font-size: 1.3rem; font-weight: 700; color: var(--text); }
+a.mo-feat-name:hover { color: var(--ember); }
+.mo-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); }
+.mo-meta span { border: 1px solid var(--border); border-radius: 6px; padding: 0.15rem 0.5rem; }
+.mo-meta .mo-prize { color: var(--mars); border-color: rgba(255, 106, 43, 0.4); }
+.mo-feat-r { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lose); box-shadow: 0 0 8px var(--lose); display: inline-block; margin-right: 0.35rem; }
+
+.mo-empty { display: flex; align-items: center; gap: 0.8rem; color: var(--text-dim); font-family: var(--font-mono); font-size: 0.8rem; }
+.mo-empty-tag { color: var(--faint); font-size: 1.1rem; }
+.mo-empty-link { margin-left: auto; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.mo-last { display: flex; flex-direction: column; gap: 0.6rem; }
+.mo-last-head { display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap; }
+.mo-winner { display: flex; align-items: center; gap: 0.7rem; font-size: 1.15rem; }
+.mo-winner-tag { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(240, 180, 71, 0.4); border-radius: 999px; padding: 0.15rem 0.6rem; }
+.mo-winner strong { color: var(--text); }
+.mo-runner { font-family: var(--font-mono); font-size: 0.8rem; }
