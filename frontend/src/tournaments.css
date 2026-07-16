@@ -1,0 +1,59 @@
+/* ============================================================
+   TURNAJE  -  vyzdvizeny zivy turnaj + kompaktni seznam (varianta C)
+   Nacita se po theme-mars.css.
+   ============================================================ */
+
+:root { --line2: #443a44; }
+
+.tl { display: flex; flex-direction: column; gap: 1rem; }
+
+/* Vyzdvizeny (probihajici) turnaj */
+.tl-feat {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 106, 43, 0.35);
+  border-radius: 14px;
+  padding: 1.3rem 1.4rem;
+  background: linear-gradient(120deg, rgba(255, 106, 43, 0.1), rgba(30, 23, 38, 0.6) 55%);
+}
+.tl-feat-pill { margin-bottom: 0.75rem; }
+.tl-feat-name {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  margin: 0.1rem 0 0.85rem;
+  text-decoration: none;
+}
+.tl-feat-name:hover { color: var(--ember); }
+.tl-arrow { color: var(--mars); font-family: var(--font-mono); }
+.tl-feat-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.tl-meta { display: flex; gap: 0.4rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); }
+.tl-meta span { border: 1px solid var(--border); border-radius: 6px; padding: 0.15rem 0.5rem; }
+.tl-meta .tl-prize { color: var(--mars); border-color: rgba(255, 106, 43, 0.4); }
+.tl-btn {
+  display: inline-flex; align-items: center;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.5rem 0.95rem; border-radius: 8px; border: 1px solid var(--line2); color: var(--text);
+  background: transparent; text-decoration: none;
+}
+.tl-btn-mars { background: linear-gradient(135deg, var(--mars), var(--mars-deep)); color: #1a0d07; font-weight: 700; border-color: transparent; }
+
+/* Kompaktni seznam ostatnich */
+.tl-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.tl-row {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.8rem 1rem;
+  text-decoration: none; color: var(--text);
+  border: 1px solid var(--border); border-radius: 10px;
+  background: rgba(23, 18, 29, 0.5);
+  transition: border-color 0.14s, background 0.14s;
+}
+.tl-row:hover { border-color: var(--line2); background: rgba(255, 106, 43, 0.05); color: var(--text); }
+.tl-row-nm { font-weight: 600; font-size: 0.98rem; }
+.tl-row-meta { flex: 1; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); }
+@media (max-width: 620px) {
+  .tl-row { flex-wrap: wrap; gap: 0.4rem; }
+  .tl-row-meta { flex-basis: 100%; order: 3; }
+}
