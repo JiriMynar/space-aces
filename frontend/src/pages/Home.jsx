@@ -5,11 +5,25 @@ import api from '../api/client'
 import { statusBadgeClass } from '../lib/labels'
 import Avatar from '../components/Avatar'
 
-const MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' }
+const RANK = { 1: '01', 2: '02', 3: '03' }
+const DASH = String.fromCharCode(8212)   // em dash
+const ARROW = String.fromCharCode(8594)  // right arrow
+const DOT = String.fromCharCode(183)     // middle dot
+const EURO = String.fromCharCode(8364)
 
 function money(value) {
   if (value == null || Number(value) <= 0) return null
-  return `${Number(value)} €`
+  return `${Number(value)} ${EURO}`
+}
+
+function SectionHead({ idx, children }) {
+  return (
+    <div className="mo-head">
+      <span className="mo-idx">{idx}</span>
+      <h2 className="mo-title">{children}</h2>
+      <span className="mo-rule" />
+    </div>
+  )
 }
 
 export default function Home() {
@@ -25,60 +39,126 @@ export default function Home() {
       const live = list.find((x) => x.status === 'in_progress')
       const draft = list.find((x) => x.status === 'draft')
       setFeatured(live || draft || null)
-    })
+    }).catch(() => setFeatured(null))
     api.get('/hall-of-fame/').then(({ data }) => setHof(data)).catch(() => setHof([]))
     api.get('/news/').then(({ data }) => setNews(data.results || data)).catch(() => setNews([]))
     api.get('/last-result/').then(({ data }) => setLastResult(data)).catch(() => setLastResult(null))
   }, [])
 
   const top3 = hof.slice(0, 3)
-  const podium = [
-    top3[1] && { player: top3[1], place: 2 },
-    top3[0] && { player: top3[0], place: 1 },
-    top3[2] && { player: top3[2], place: 3 },
-  ].filter(Boolean)
+  const byPlace = { 1: top3[0], 2: top3[1], 3: top3[2] }
+  const order = [2, 1, 3]
 
   return (
     <div className="home">
       <header className="home-hero">
+        <div className="mo-eyebrow">{t('home.introTitle')}</div>
         <h1>{t('brand')}</h1>
         <p>{t('home.subtitle')}</p>
       </header>
 
       <p className="home-intro">{t('home.introText')}</p>
 
-      {lastResult && lastResult.winner && (
-        <section>
-          <h2 className="section-title">🏁 {t('home.lastResult')}</h2>
-          <div className="last-result">
-            <div>
-              <Link to={`/tournaments/${lastResult.id}`} className="featured-name">{lastResult.name}</Link>
-              <span className="muted"> · {lastResult.format_label} · {t(`mode.${lastResult.mode}`)}</span>
-            </div>
-            {(lastResult.event_date || money(lastResult.prize_pool)) && (
-              <div className="muted" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', fontSize: '0.9rem' }}>
-                {lastResult.event_date && <span>📅 {lastResult.event_date}</span>}
-                {money(lastResult.prize_pool) && <span>💰 {money(lastResult.prize_pool)}</span>}
+      {/* 01 - Sin slavy */}
+      <section>
+        <SectionHead idx="01">{t('home.hallOfFame')}</SectionHead>
+        <div className="pod-grid">
+          {order.map((place) => {
+            const p = byPlace[place]
+            return (
+              <div className={`pod p${place}${p ? '' : ' empty'}`} key={place}>
+                <div className="pod-rank">{RANK[place]}</div>
+                {p ? (
+                  <>
+                    <div className="pod-id">
+                      <Avatar player={p} size={40} />
+                      <Link to={`/players/${p.id}`} className="pod-name">{p.nick}</Link>
+                    </div>
+                    <div className="pod-stats">
+                      <div><b>{p.titles || 0}</b><span>{t('home.titlesLabel')}</span></div>
+                      <div><b>{p.podiums || 0}</b><span>{t('home.top3Label')}</span></div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="pod-name pod-vacant">{DASH}</div>
+                    <div className="pod-empty-note">{t('home.noChampions')}</div>
+                  </>
+                )}
               </div>
-            )}
-            <div className="lr-winner">🏆 <strong>{lastResult.winner.name}</strong> <span className="muted">— {t('home.winner')}</span></div>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* 02 - Vybrany turnaj */}
+      <section>
+        <SectionHead idx="02">{t('home.featured')}</SectionHead>
+        {featured ? (
+          <div className="panel mo-feat">
+            <div className="mo-feat-l">
+              <Link to={`/tournaments/${featured.id}`} className="mo-feat-name">{featured.name}</Link>
+              <div className="mo-meta">
+                <span>{featured.format_label}</span>
+                <span>{t(`mode.${featured.mode}`)}</span>
+                {featured.event_date && <span>{featured.event_date}</span>}
+                {money(featured.prize_pool) && <span className="mo-prize">{money(featured.prize_pool)}</span>}
+              </div>
+            </div>
+            <div className="mo-feat-r">
+              {featured.stream_url && (
+                <a href={featured.stream_url} target="_blank" rel="noreferrer" className="stream-btn">
+                  <span className="live-dot" />{t('home.watchLive')}
+                </a>
+              )}
+              <span className={statusBadgeClass(featured.status)}>{t(`status.${featured.status}`)}</span>
+            </div>
+          </div>
+        ) : (
+          <div className="panel mo-empty">
+            <span className="mo-empty-tag">{DASH}</span>
+            <span>{t('home.noTournament')}</span>
+            <Link to="/tournaments" className="mo-empty-link">{t('home.viewAll')} {ARROW}</Link>
+          </div>
+        )}
+      </section>
+
+      {/* 03 - Posledni vysledek */}
+      <section>
+        <SectionHead idx="03">{t('home.lastResult')}</SectionHead>
+        {lastResult && lastResult.winner ? (
+          <div className="panel mo-last">
+            <div className="mo-last-head">
+              <Link to={`/tournaments/${lastResult.id}`} className="mo-feat-name">{lastResult.name}</Link>
+              <span className="muted">{lastResult.format_label} {DOT} {t(`mode.${lastResult.mode}`)}</span>
+            </div>
+            <div className="mo-winner">
+              <span className="mo-winner-tag">{t('home.winner')}</span>
+              <strong>{lastResult.winner.name}</strong>
+            </div>
             {lastResult.mode === 'league' && (lastResult.standings || []).length > 0 && (
               <ol className="lr-standings muted">
                 {lastResult.standings.map((row, i) => (
-                  <li key={row.team_id}>{i + 1}. {row.name} — {row.points} {t('league.points')}</li>
+                  <li key={row.team_id}>{i + 1}. {row.name} {DASH} {row.points} {t('league.points')}</li>
                 ))}
               </ol>
             )}
             {lastResult.mode !== 'league' && lastResult.runner_up && (
-              <div className="muted" style={{ fontSize: '0.9rem' }}>🥈 {lastResult.runner_up.name}</div>
+              <div className="muted mo-runner">2. {lastResult.runner_up.name}</div>
             )}
           </div>
-        </section>
-      )}
+        ) : (
+          <div className="panel mo-empty">
+            <span className="mo-empty-tag">{DASH}</span>
+            <span>{t('home.noChampions')}</span>
+          </div>
+        )}
+      </section>
 
+      {/* 04 - Novinky (jen kdyz existuji) */}
       {news.length > 0 && (
         <section>
-          <h2 className="section-title">📢 {t('home.news')}</h2>
+          <SectionHead idx="04">{t('home.news')}</SectionHead>
           <div className="grid" style={{ gap: '0.8rem' }}>
             {news.slice(0, 4).map((n) => (
               <article key={n.id} className="news-item">
@@ -90,60 +170,7 @@ export default function Home() {
         </section>
       )}
 
-      <section>
-        <h2 className="section-title">🏆 {t('home.hallOfFame')}</h2>
-        {hof.length === 0 ? (
-          <p className="muted">{t('home.noChampions')}</p>
-        ) : (
-          <>
-            <div className="podium">
-              {podium.map(({ player, place }) => (
-                <div className={`podium-place p${place}`} key={player.id}>
-                  <div className="podium-medal">{MEDALS[place]}</div>
-                  <Avatar player={player} size={48} />
-                  <Link to={`/players/${player.id}`} className="podium-name">{player.nick}</Link>
-                  <div className="podium-ach">
-                    {player.titles > 0 && (
-                      <span className="ach-title" title={t('home.titlesLabel')}>👑 {player.titles}</span>
-                    )}
-                    <span title={t('home.top3Label')}>🏆 {player.podiums}</span>
-                  </div>
-                  <div className="podium-bar"><span className="podium-num">{place}</span></div>
-                </div>
-              ))}
-            </div>
-            <p className="podium-legend muted">
-              👑 {t('home.titlesLabel')} · 🏆 {t('home.top3Label')}
-            </p>
-          </>
-        )}
-      </section>
-
-      <section className="home-featured">
-        <h2 className="section-title">{t('home.featured')}</h2>
-        {featured ? (
-          <div className="featured-inline">
-            <div>
-              <Link to={`/tournaments/${featured.id}`} className="featured-name">{featured.name}</Link>
-              <span className="muted">
-                {' · '}{featured.format_label} · {t(`mode.${featured.mode}`)}
-                {featured.event_date ? ` · 📅 ${featured.event_date}` : ''}
-                {money(featured.prize_pool) ? ` · 💰 ${money(featured.prize_pool)}` : ''}
-              </span>
-            </div>
-            <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
-              {featured.stream_url && (
-                <a href={featured.stream_url} target="_blank" rel="noreferrer" className="stream-btn">🔴 {t('home.watchLive')}</a>
-              )}
-              <span className={statusBadgeClass(featured.status)}>{t(`status.${featured.status}`)}</span>
-            </div>
-          </div>
-        ) : (
-          <p className="muted">{t('home.noTournament')}</p>
-        )}
-      </section>
-
-      <Link to="/tournaments" className="home-viewall">{t('home.viewAll')} →</Link>
+      <Link to="/tournaments" className="home-viewall">{t('home.viewAll')} {ARROW}</Link>
     </div>
   )
 }
